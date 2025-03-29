@@ -1,0 +1,30 @@
+# macOS system files
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# VSCode
+.vscode/
+
+# Environment
+.env
+.venv/
+env/
+venv/
+
+# Logs
+*.log
+
+# Compiled Java
+*.class
+
+# Node
+node_modules/
+
+# Misc
+*.swp
+Thumbs.db
+
