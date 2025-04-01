@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>My Style Guide</title>
+
+    <!-- Site theme -->
+    <link rel="stylesheet" type="text/css" href="css/theme.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <!--  Place Custom Styles Below -->
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <img src="ShelfBuddy.png" alt="ShelfBuddy WebApp">
+
+    <style>
+        /* Global Styles */
+        body {
+            font-family: "Courier New", Courier, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "monospace";
+            background-color: #ffffff;
+            color: black;
+            margin: 20px;
+        }
+
+        /* Color Theme Boxes */
+        .box {
+            height: 100px;
+            width: 100px;
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            line-height: 100px;
+            font-weight: bold;
+            color: white;
+            border-radius: 8px;
+        }
+
+        #primary1 { background-color: #89d0cc; }  /* Teal */
+        #primary2 { background-color: #ffffff; color: black; border: 1px solid black; } /* White */
+        #primary3 { background-color: #E85F5C; }  /* Coral Red */
+        #primary4 { background-color: #000000; }  /* Black */
+        #primary5 { background-color: #C8D074; }  /* Olive Green */
+
+        /* Headings */
+        h1 { font-size: 24px; font-weight: bold; color: #000000; }
+        h2 { font-size: 20px; color: #E85F5C; }
+        h3 { font-size: 16px; color: #89d0cc; }
+
+        /* Buttons */
+        button {
+            background-color: #000000;
+            border-radius: 20px;
+            padding: 15px;
+            color: white;
+            width: 200px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #E85F5C;
+        }
+
+        /* Input Fields */
+        .inputLabel {
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input.inputField {
+            padding: 8px;
+            border: 1px solid #000000;
+            width: 200px;
+        }
+
+        /* Alerts */
+        .warning {
+            font-weight: bold;
+            color: blue;
+        }
+
+        .danger {
+            font-weight: bold;
+            color: red;
+        }
+
+        .success {
+            font-weight: bold;
+            color: black;
+        }
+
+        /* Footer */
+        #footer {
+            border-top: 2px solid #E85F5C;
+            margin-top: 50px;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a name="Top"></a>
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#">
+                    <span class="navbar-brand">
+                        <i class="fas fa-home"></i>The ShelfBuddy Style Guide</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="#font">Font</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#colorTheme">Color Theme</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#headings">Headings</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#buttons">Buttons</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#formElements">Form Elements</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#messages">Messages</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <!-- About -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="about"></a>The ShelfBuddy Web Application Styles</h1>
+                </div>
+                <p>This page contains specific style guide information for the ShelfBuddy web application front end interface.</p>
+            </div>
+            <!-- End About -->
+
+            <!-- Fonts -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="fonts"></a>Font</h1>
+                </div>
+                <p>My application utilizes the "Courier New", "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "monospace" font-family with black text.</p>
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End Fonts -->
+
+            <!-- Color Theme -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="colorTheme"></a>Color Theme</h1>
+                </div>
+                <p>My application incorporates the below color scheme in its interface.</p>
+                <div class="box" id="primary1"></div>
+                <div class="box" id="primary2"></div>
+                <div class="box" id="primary3"></div>
+                <div class="box" id="primary4"></div>
+                <div class="box" id="primary5"></div>
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End Color Theme -->
+
+            <!-- Headings -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="headings"></a>Headings</h1>
+                </div>
+                <p>The below font sizes and styles are used in the application for various content headings.</p>
+                <h1>Heading 1</h1>
+                <h2>Heading 2</h2>
+                <h3>Heading 3</h3>
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End Headings -->
+
+            <!-- Buttons -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="buttons"></a>Buttons</h1>
+                </div>
+                <p>The application will feature buttons that contain the below color and shape:</p>
+                <button>My Button</button>
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End Buttons -->
+
+            <!-- Form Elements -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="formElements"></a>Form Elements</h1>
+                </div>
+                <p>For the varous forms that the application will contain, it will contain input fields and labels with the below styling:</p>
+                <div class="form-check">    
+                    <form>
+                        <label for="name" class="inputLabel">Name</label>
+                        <input type="input" id="name" class="inputField" value="">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" checked disabled>
+                            <label class="form-check-label" for="flexCheckCheckedDisabled"> Example Checkbox element </label>
+                    </form>
+                
+
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End Form Elements -->
+
+            <!-- User Messages -->
+            <div>
+                <div class="page-header">
+                    <h1>
+                        <a name="messages"></a>Messages</h1>
+                </div>
+                <p>For various completed tasks, application notifications will be presented to the user based.  The following contextual messages will be used.</p>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </symbol>
+                    
+                    <symbol id="x-icon-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </symbol>
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </symbol>
+                </svg>
+                
+                <div class="alert alert-warning d-flex align-items-center warning" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                    </svg>
+                <div>An example warning alert with an icon</div>
+                </div>
+                
+                <div class="alert alert-danger d-flex align-items-center danger" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                        <use xlink:href="#x-icon-fill"/>
+                    </svg>
+                <div>An example danger alert with an "X" icon</div>
+                </div>
+                <div class="alert alert-success d-flex align-items-center success" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                        <use xlink:href="#check-circle-fill"/>
+                    </svg>
+                <div>An example success alert with a check icon</div>
+            </div>
+            <div class="spacer">
+                <a href="#Top">Back to Top</a>
+            </div>
+            <!-- End User Messages -->
+        </div>
+    </div>
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted">Copyright My Style Guide</p>
+        </div>
+    </div>
+</body>
+
+</html>
