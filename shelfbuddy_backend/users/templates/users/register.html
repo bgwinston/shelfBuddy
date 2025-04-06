@@ -1,0 +1,53 @@
+<h2>Register</h2>
+{% if success %}
+  <p style="color:green">{{ success }}</p>
+{% endif %}
+<form method="POST">
+  {% csrf_token %}
+  
+  <label>First Name:</label>
+  <input type="text" name="first_name" required><br>
+
+  <label>Email:</label>
+  <input type="email" name="email" required><br>
+
+  <label>Username:</label>
+  <input type="text" name="username" required><br>
+
+  <label>Password:</label>
+  <input type="password" name="password" required><br>
+
+  <label>Favorite Genre:</label>
+  <select name="favorite_genre" id="genre-select" onchange="toggleOtherGenreInput()">
+    <option value="">--Select Genre--</option>
+    <option value="Fantasy">Fantasy</option>
+    <option value="Mystery">Mystery</option>
+    <option value="Science Fiction">Science Fiction</option>
+    <option value="Romance">Romance</option>
+    <option value="Nonfiction">Nonfiction</option>
+    <option value="Other">Other</option>
+  </select><br>
+
+  <div id="other-genre-div" style="display:none;">
+    <label>Other Genre:</label>
+    <input type="text" name="other_genre"><br>
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+
+<script>  <!--JavaScript to hide the "Other Genre" input field-->
+  function toggleOtherGenreInput() {
+    const genreSelect = document.getElementById("genre-select");
+    const otherDiv = document.getElementById("other-genre-div");
+    if (genreSelect.value === "Other") {
+      otherDiv.style.display = "block";
+    } else {
+      otherDiv.style.display = "none";
+    }
+  }
+</script>
+
+{% if error %}
+  <p style="color:red">{{ error }}</p>
+{% endif %}

@@ -1,3 +1,35 @@
-from django.shortcuts import render
+from .models import CustomUser
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password  # DJango build in hashing function
 
-# Create your views here.
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST['first_name']
+        email = request.POST['email']
+        favorite_genre = request.POST['favorite_genre']
+        if favorite_genre == "Other":
+            favorite_genre = request.POST.get('other_genre', '')
+
+        if CustomUser.objects.filter(username=username).exists():
+            return render(request, 'users/register.html', {'error': 'Username already exists'})
+
+        if CustomUser.objects.filter(email=email).exists():
+            return render(request, 'users/register.html', {'error': 'Email already in use'})
+
+        # Optional: hash the password before saving
+        hashed_password = make_password(password)
+
+        CustomUser.objects.create(
+            username=username,
+            password=hashed_password,  # Use the hashed password
+            first_name=first_name,
+            email=email,
+            favorite_genre=favorite_genre
+        )
+
+        return render(request, 'users/register.html', {'success': 'User registered!'})
+        #return redirect('login')
+
+    return render(request, 'users/register.html')
