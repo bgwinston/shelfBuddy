@@ -33,3 +33,21 @@ def register_view(request):
         #return redirect('login')
 
     return render(request, 'users/register.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            user = CustomUser.objects.get(username=username)
+            if check_password(password, user.password):
+                # Optional: store user info in session
+                request.session['user_id'] = user.id
+                return redirect('dashboard')  # or wherever you want
+            else:
+                return render(request, 'users/login.html', {'error': 'Incorrect password'})
+        except CustomUser.DoesNotExist:
+            return render(request, 'users/login.html', {'error': 'User not found'})
+
+    return render(request, 'users/login.html')
