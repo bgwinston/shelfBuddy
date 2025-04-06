@@ -1,14 +1,16 @@
 from .models import CustomUser
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password  # DJango build in hashing function
+from django.contrib.auth.hashers import check_password # Django build function
 
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['first_name']
-        email = request.POST['email']
-        favorite_genre = request.POST['favorite_genre']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        email = request.POST.get('email')
+        favorite_genre = request.POST.get('favorite_genre', '')
+
         if favorite_genre == "Other":
             favorite_genre = request.POST.get('other_genre', '')
 
@@ -29,7 +31,7 @@ def register_view(request):
             favorite_genre=favorite_genre
         )
 
-        return render(request, 'users/register.html', {'success': 'User registered!'})
+        return render(request, 'users/login.html', {'success': 'User registered! Login here!'})
         #return redirect('login')
 
     return render(request, 'users/register.html')
@@ -42,9 +44,8 @@ def login_view(request):
         try:
             user = CustomUser.objects.get(username=username)
             if check_password(password, user.password):
-                # Optional: store user info in session
                 request.session['user_id'] = user.id
-                return redirect('dashboard')  # or wherever you want
+                return redirect('dashboard') 
             else:
                 return render(request, 'users/login.html', {'error': 'Incorrect password'})
         except CustomUser.DoesNotExist:

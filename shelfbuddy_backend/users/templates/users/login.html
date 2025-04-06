@@ -1,5 +1,8 @@
 <!-- users/templates/api/login.html -->
 <h2>Login</h2>
+{% if success %}
+  <p style="color:green">{{ success }}</p>
+{% endif %}
 <form method="POST">
   {% csrf_token %}
   <label>Username:</label>
