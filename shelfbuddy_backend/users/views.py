@@ -64,7 +64,7 @@ def dashboard_view(request):
 
     user = CustomUser.objects.get(id=user_id)
 
-    return render(request, 'users/dashboard.html', {'username': user.username})
+    return render(request, 'users/dashboard.html', {'first_name': user.first_name})
 
 from django.shortcuts import redirect
 
