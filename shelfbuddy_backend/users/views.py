@@ -52,3 +52,22 @@ def login_view(request):
             return render(request, 'users/login.html', {'error': 'User not found'})
 
     return render(request, 'users/login.html')
+
+from django.shortcuts import render, redirect
+from .models import CustomUser
+
+def dashboard_view(request):
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')  # not logged in
+
+    user = CustomUser.objects.get(id=user_id)
+
+    return render(request, 'users/dashboard.html', {'username': user.username})
+
+from django.shortcuts import redirect
+
+def logout_view(request):
+    request.session.flush()  # Clears all session data
+    return redirect('login')  # Send them back to login page
