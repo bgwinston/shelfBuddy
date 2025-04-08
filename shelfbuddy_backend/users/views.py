@@ -2,6 +2,12 @@ from .models import CustomUser
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password  # DJango build in hashing function
 from django.contrib.auth.hashers import check_password # Django build function
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -36,6 +42,7 @@ def register_view(request):
 
     return render(request, 'users/register.html')
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -53,8 +60,6 @@ def login_view(request):
 
     return render(request, 'users/login.html')
 
-from django.shortcuts import render, redirect
-from .models import CustomUser
 
 def dashboard_view(request):
     user_id = request.session.get('user_id')
@@ -66,7 +71,14 @@ def dashboard_view(request):
 
     return render(request, 'users/dashboard.html', {'first_name': user.first_name})
 
-from django.shortcuts import redirect
+
+#@login_required
+def add_book_view(request):
+    print("Logged in user:", request.user)  
+    return render(request, 'add-book.html')
+# @login_required
+# def dashboard_view(request):
+#     return render(request, 'dashboard.html')
 
 def logout_view(request):
     request.session.flush()  # Clears all session data
