@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📚 My Library</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    img {
+      height: 75px;
+    }
+    .checkmark {
+      font-size: 1.5em;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h2>📚 My Library Snapshot</h2>
+
+  {% if books %}
+  <table>
+    <thead>
+      <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Status</th>
+        <th>Public Library</th>
+        <th>Loaned</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>
+            {% if book.cover_image %}
+              <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="100">
+            {% else %}
+              <em>No cover</em>
+            {% endif %}
+          </td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.genre|default:"N/A" }}</td>
+        <td>{{ book.status|default:"-" }}</td>
+        <td>{% if book.is_public_library %}<span class="checkmark">✔</span>{% endif %}</td>
+        <td>{% if book.is_loaned %}<span class="checkmark">✔</span>{% endif %}</td>
+        <td>{{ book.due_date|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>You haven't added any books yet.</p>
+  {% endif %}
+</body>
+</html>

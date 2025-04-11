@@ -1,13 +1,14 @@
-from .models import CustomUser
 from django.shortcuts import render, redirect
-from django.contrib.auth.hashers import make_password  # DJango build in hashing function
-from django.contrib.auth.hashers import check_password # Django build function
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 
+
+
+User = get_user_model()
 
 def register_view(request):
     if request.method == 'POST':
@@ -20,27 +21,28 @@ def register_view(request):
         if favorite_genre == "Other":
             favorite_genre = request.POST.get('other_genre', '')
 
-        if CustomUser.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             return render(request, 'users/register.html', {'error': 'Username already exists'})
 
-        if CustomUser.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             return render(request, 'users/register.html', {'error': 'Email already in use'})
 
-        # Optional: hash the password before saving
-        hashed_password = make_password(password)
+        if password != request.POST.get('confirm_password'):
+            return render(request, 'users/register.html', {'error': 'Passwords do not match'})
 
-        CustomUser.objects.create(
+        # ✅ Use create_user so password is hashed properly
+        user = User.objects.create_user(
             username=username,
-            password=hashed_password,  # Use the hashed password
+            password=password,
             first_name=first_name,
             email=email,
             favorite_genre=favorite_genre
         )
 
-        return render(request, 'users/login.html', {'success': 'User registered! Login here!'})
-        #return redirect('login')
+        return redirect('login')
 
     return render(request, 'users/register.html')
+
 
 
 def login_view(request):
@@ -48,38 +50,32 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        try:
-            user = CustomUser.objects.get(username=username)
-            if check_password(password, user.password):
-                request.session['user_id'] = user.id
-                return redirect('dashboard') 
-            else:
-                return render(request, 'users/login.html', {'error': 'Incorrect password'})
-        except CustomUser.DoesNotExist:
-            return render(request, 'users/login.html', {'error': 'User not found'})
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            return render(request, 'users/login.html', {'error': 'Invalid credentials'})
 
     return render(request, 'users/login.html')
 
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def dashboard_view(request):
-    user_id = request.session.get('user_id')
-
-    if not user_id:
-        return redirect('login')  # not logged in
-
-    user = CustomUser.objects.get(id=user_id)
-
-    return render(request, 'users/dashboard.html', {'first_name': user.first_name})
+    return render(request, 'users/dashboard.html', {
+        'first_name': request.user.first_name
+    })
 
 
-#@login_required
+@login_required
 def add_book_view(request):
-    print("Logged in user:", request.user)  
-    return render(request, 'add-book.html')
-# @login_required
-# def dashboard_view(request):
-#     return render(request, 'dashboard.html')
+    return render(request, 'books/booksearch.html')
+
+from django.contrib.auth import logout
 
 def logout_view(request):
-    request.session.flush()  # Clears all session data
-    return redirect('login')  # Send them back to login page
+    logout(request)
+    return redirect('login')

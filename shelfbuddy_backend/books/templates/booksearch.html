@@ -1,6 +1,6 @@
 <h2>Add a Book</h2>
 
-<form method="get" action="{% url 'add-book' %}">
+<form method="get" action="{% url 'booksearch' %}">
     <input type="text" name="q" value="{{ search_query }}" placeholder="Search title or author" required>
     <select name="search_type">
         <option value="all">All</option>
@@ -13,8 +13,10 @@
 {% if results %}
     <h3>Search Results</h3>
     {% for book in results %}
-        <form method="post" action="{% url 'save-book' %}">
-            {% csrf_token %}
+    <!-- <a href="{% url 'bookview' book.google_book_id %}" style="display: inline-block; padding: 10px; background: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
+        View Book Details
+    </a> -->
+              {% csrf_token %}
             <div style="border:1px solid #ccc; margin-bottom: 10px; padding: 10px;">
                 <img src="{{ book.thumbnail }}" alt="Cover" style="height: 100px;">
                 <strong>{{ book.title }}</strong><br>
@@ -23,12 +25,15 @@
                 
                 <input type="hidden" name="title" value="{{ book.title }}">
                 <input type="hidden" name="authors" value="{{ book.authors }}">
+                <input type="hidden" name="genre" value="{{ book.genre }}">
                 <input type="hidden" name="description" value="{{ book.description }}">
                 <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
                 <input type="hidden" name="source" value="google">
                 
-                <button type="submit">Add to My Books</button>
-            </div>
+                <a href="{% url 'bookview' book.google_book_id %}">
+                    View Book Details   
+                </a>         
+                </div>
         </form>
     {% endfor %}
 {% endif %}
