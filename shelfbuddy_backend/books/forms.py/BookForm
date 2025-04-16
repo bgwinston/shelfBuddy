@@ -1,0 +1,36 @@
+from django import forms
+from .models import Book
+
+class BookForm(forms.ModelForm):
+    # Two genre inputs: one from existing, one optional for new genre
+    genre_existing = forms.ChoiceField(label="Select Genre", required=False)
+    genre_new = forms.CharField(label="Or Enter New Genre", required=False)
+
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'status', 'is_public_library', 'is_loaned', 'due_date', 'cover_image']
+        widgets = {
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        genres = kwargs.pop('genres', [])
+        super().__init__(*args, **kwargs)
+        self.fields['genre_existing'].choices = [('', '---------')] + [(g, g) for g in genres]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        existing = cleaned_data.get('genre_existing')
+        new = cleaned_data.get('genre_new')
+
+        if not existing and not new:
+            raise forms.ValidationError("Please select an existing genre or enter a new one.")
+
+        # Only one genre gets saved to the model
+        genre_final = new if new else existing
+        cleaned_data['genre'] = genre_final
+        return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.genre = self.cleaned_data['genre']
+        return super().save(commit)

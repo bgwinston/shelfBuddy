@@ -1,8 +1,27 @@
 import requests
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from users.models import CustomUser  
+import datetime
 
+GENRE_CHOICES = [
+    'Fiction',
+    'Non-Fiction',
+    'Fantasy',
+    'Science Fiction',
+    'Mystery',
+    'Biography',
+    'Romance',
+    'Historical',
+    'Thriller',
+    'Self-Help',
+    'Philosophy',
+    'Children’s',
+    'Young Adult',
+    'Comics',
+    'Poetry',
+    'Education',
+]
 
 def book_search(request):
     user_id = request.session.get('user_id')
@@ -117,3 +136,63 @@ def my_library_view(request):
 
     books = Book.objects.only('id', 'title', 'author', 'cover_image', 'source').filter(user=user)
     return render(request, 'mylibrary.html', {'books': books})
+
+def edit_book(request, book_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return redirect('login')
+
+    book = get_object_or_404(Book, id=book_id, user=user)
+
+    if request.method == 'POST':
+        book.title = request.POST.get('title')
+        book.author = request.POST.get('author')
+        book.description = request.POST.get('description')
+
+        # Genre: use new if provided, else use selected
+        genre_existing = request.POST.get('genre_existing')
+        genre_new = request.POST.get('genre_new')
+        book.genre = genre_new.strip() if genre_new else genre_existing
+
+        book.is_public_library = 'is_public_library' in request.POST
+        book.is_loaned = 'is_loaned' in request.POST
+
+        due_date_str = request.POST.get('due_date')
+        if due_date_str:
+            try:
+                book.due_date = datetime.strptime(due_date_str, '%Y-%m-%d').date()
+            except ValueError:
+                book.due_date = None
+        else:
+            book.due_date = None
+
+        book.save()
+        return redirect('mylibrary')
+
+    return render(request, 'edit_book.html', {
+        'book': book,
+        'genres': GENRE_CHOICES  # 🔥 Pass to template
+    })
+
+def delete_book(request, book_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return redirect('login')
+
+    book = get_object_or_404(Book, id=book_id, user=user)
+
+    if request.method == 'POST':
+        book.delete()
+        return redirect('mylibrary')
+
+    return redirect('edit_book', book_id=book.id)
