@@ -92,18 +92,33 @@
     <label>Or enter a new genre:</label>
     <input type="text" name="genre_new" placeholder="e.g. Sci-Fi, Historical..." value=""><br>
 
-    <label>
-      <input type="checkbox" name="is_public_library" {% if book.is_public_library %}checked{% endif %}>
-      From Public Library
-    </label>
+    <label>Library Type:</label>
+    <select name="library_type" id="library-type">
+      <option value="my" {% if not book.is_public_library %}selected{% endif %}>My Library</option>
+      <option value="public" {% if book.is_public_library %}selected{% endif %}>Public Library</option>
+    </select>
+    
+    <div id="public-library-details">
+      <label>Library Name:</label>
+      <input type="text" name="library_name" value="{{ book.library_name|default:'' }}" placeholder="e.g. City Library">
+    
+      <label>Due Date:</label>
+      <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
+    </div>
 
-    <label>
-      <input type="checkbox" name="is_loaned" {% if book.is_loaned %}checked{% endif %}>
-      Loaned to Someone
-    </label>
-
-    <label>Due Date:</label>
-    <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
+    <label>Loaned:</label>
+    <select name="is_loaned" id="is-loaned">
+      <option value="no" {% if not book.is_loaned %}selected{% endif %}>No</option>
+      <option value="yes" {% if book.is_loaned %}selected{% endif %}>Yes</option>
+    </select>
+    
+    <div id="loan-details">
+      <label>Loaned To:</label>
+      <input type="text" name="loaned_to" value="{{ book.loaned_to|default:'' }}" placeholder="e.g. John, Sarah">
+    
+      <label>Due Date:</label>
+      <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
+    </div>
 
     <div class="form-buttons">
       <button type="submit" class="save-btn">💾 Save Changes</button>
@@ -115,5 +130,28 @@
     </form>
   </div>
   <a href="{% url 'mylibrary' %}">← Back to My Library</a>
+  <!---Hide and show fields using javascript-->
+  <script>
+    const loanedSelect = document.getElementById("is-loaned");
+    const loanDetails = document.getElementById("loan-details");
+    const librarySelect = document.getElementById("library-type");
+    const publicLibraryDetails = document.getElementById("public-library-details");
+
+    function toggleLoanFields() {
+      loanDetails.style.display = loanedSelect.value === "yes" ? "block" : "none";
+    }
+
+    function toggleLibraryFields() {
+      publicLibraryDetails.style.display = librarySelect.value === "public" ? "block" : "none";
+    }
+
+    // On page load
+    toggleLoanFields();
+    toggleLibraryFields();
+
+    // When dropdowns change
+    loanedSelect.addEventListener("change", toggleLoanFields);
+    librarySelect.addEventListener("change", toggleLibraryFields);
+  </script>
 </body>
 </html>

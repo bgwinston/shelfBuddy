@@ -2,7 +2,8 @@ import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from users.models import CustomUser  
-import datetime
+from datetime import datetime
+
 
 GENRE_CHOICES = [
     'Fiction',
@@ -134,7 +135,7 @@ def my_library_view(request):
     except CustomUser.DoesNotExist:
         return redirect('login')
 
-    books = Book.objects.only('id', 'title', 'author', 'cover_image', 'source').filter(user=user)
+    books = Book.objects.filter(user=user)  # loads all fields
     return render(request, 'mylibrary.html', {'books': books})
 
 def edit_book(request, book_id):
@@ -154,14 +155,22 @@ def edit_book(request, book_id):
         book.author = request.POST.get('author')
         book.description = request.POST.get('description')
 
-        # Genre: use new if provided, else use selected
+        # Genre (choose or enter new)
         genre_existing = request.POST.get('genre_existing')
         genre_new = request.POST.get('genre_new')
         book.genre = genre_new.strip() if genre_new else genre_existing
 
-        book.is_public_library = 'is_public_library' in request.POST
-        book.is_loaned = 'is_loaned' in request.POST
+        # Library type
+        library_type = request.POST.get('library_type')
+        book.is_public_library = (library_type == 'public')
+        book.library_name = request.POST.get('library_name', '').strip() if book.is_public_library else ''
 
+        # Loaned info
+        is_loaned = request.POST.get('is_loaned')
+        book.is_loaned = (is_loaned == 'yes')
+        book.loaned_to = request.POST.get('loaned_to', '').strip() if book.is_loaned else ''
+
+        # Due date (used for both public library and loaned)
         due_date_str = request.POST.get('due_date')
         if due_date_str:
             try:
@@ -176,7 +185,7 @@ def edit_book(request, book_id):
 
     return render(request, 'edit_book.html', {
         'book': book,
-        'genres': GENRE_CHOICES  # 🔥 Pass to template
+        'genres': GENRE_CHOICES
     })
 
 def delete_book(request, book_id):
@@ -196,3 +205,17 @@ def delete_book(request, book_id):
         return redirect('mylibrary')
 
     return redirect('edit_book', book_id=book.id)
+
+def mybookshelf_view(request, book_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return redirect('login')
+
+    book = get_object_or_404(Book, id=book_id, user=user)
+
+    return render(request, 'mybookshelf.html', {'book': book})
