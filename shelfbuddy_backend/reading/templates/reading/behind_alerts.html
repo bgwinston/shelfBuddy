@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<h2>🚨 Behind on Reading Plans</h2>
+<ul>
+  {% for item in behind %}
+    <li>
+      <strong>{{ item.book }}</strong>: You are {{ item.difference }} pages behind ({{ item.actual }} of {{ item.expected }} pages read)
+    </li>
+  {% empty %}
+    <li>You're on track with all your reading plans! 🎉</li>
+  {% endfor %}
+</ul>
+</head>
+</html>

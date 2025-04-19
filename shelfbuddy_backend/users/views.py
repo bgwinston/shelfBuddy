@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 
@@ -79,3 +81,58 @@ from django.contrib.auth import logout
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+@login_required
+def reading_dashboard(request):
+    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+    return render(request, 'reading/reading_dashboard.html', {'plans': plans})
+
+@login_required
+def profile_view(request):
+    return render(request, 'users/profile_view.html', {'user': request.user})
+
+
+@login_required
+def edit_profile_view(request):
+    user = request.user
+    password_form = PasswordChangeForm(user=user, data=request.POST or None)
+
+    if request.method == 'POST':
+        # Update user fields
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.email = request.POST.get('email', user.email)
+        user.username = request.POST.get('username', user.username)
+
+        # Genre handling
+        genre = request.POST.get('favorite_genre')
+        other = request.POST.get('other_genre', '').strip()
+        user.favorite_genre = other if genre == 'Other' and other else genre
+
+        try:
+            user.save()
+        except:
+            return render(request, 'users/edit_profile.html', {
+                'user': user,
+                'password_form': password_form,
+                'error': 'Failed to update profile info.'
+            })
+
+        # Handle password change
+        if password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, user)  # Keeps user logged in
+            return redirect('profile')
+
+        elif password_form.cleaned_data:
+            return render(request, 'users/edit_profile.html', {
+                'user': user,
+                'password_form': password_form,
+                'error': 'Password not updated. Please correct the errors below.'
+            })
+
+        return redirect('profile')
+
+    return render(request, 'users/edit_profile_view.html', {
+        'user': user,
+        'password_form': password_form
+    })

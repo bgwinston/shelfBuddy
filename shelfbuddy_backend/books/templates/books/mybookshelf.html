@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'reading/base.html' %}
+
+{% block content %}
   <title>{{ book.title }} - Book Details</title>
   <style>
     body {
@@ -98,4 +98,4 @@
   <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
   <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
 </body>
-</html>
+{% endblock %}

@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'reading/base.html' %}
+
+{% block content %}
   <title>{{ book.title }} – Book View</title>
   <style>
     .save-book-button {
@@ -53,5 +53,4 @@
   <br>
   <a href="{% url 'booksearch' %}" class="back-link">← Back to Search</a>
 
-</body>
-</html>
+  {% endblock %}

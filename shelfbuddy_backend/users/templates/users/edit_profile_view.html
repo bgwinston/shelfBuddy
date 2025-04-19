@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #f9f9f9;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .success {
+      color: green;
+      text-align: center;
+    }
+    .error {
+      color: red;
+      text-align: center;
+    }
+    ul.error li {
+      color: red;
+      list-style: none;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Edit Profile</h2>
+
+  {% if success %}
+    <p class="success">{{ success }}</p>
+  {% endif %}
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+
+  {% if password_form.errors %}
+    <ul class="error">
+      {% for field, errors in password_form.errors.items %}
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <label>First Name:</label>
+    <input type="text" name="first_name" value="{{ user.first_name }}" required>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ user.username }}" required>
+
+    <label>Favorite Genre:</label>
+    <select name="favorite_genre" id="genre-select" onchange="toggleOtherGenreInput()">
+      <option value="">--Select Genre--</option>
+      <option value="Fantasy" {% if user.favorite_genre == "Fantasy" %}selected{% endif %}>Fantasy</option>
+      <option value="Mystery" {% if user.favorite_genre == "Mystery" %}selected{% endif %}>Mystery</option>
+      <option value="Science Fiction" {% if user.favorite_genre == "Science Fiction" %}selected{% endif %}>Science Fiction</option>
+      <option value="Romance" {% if user.favorite_genre == "Romance" %}selected{% endif %}>Romance</option>
+      <option value="Nonfiction" {% if user.favorite_genre == "Nonfiction" %}selected{% endif %}>Nonfiction</option>
+      <option value="Other" {% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}selected{% endif %}>Other</option>
+    </select>
+
+    <div id="other-genre-div" style="display: {% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}block{% else %}none{% endif %};">
+      <label>Other Genre:</label>
+      <input type="text" name="other_genre" value="{% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}{{ user.favorite_genre }}{% endif %}">
+    </div>
+
+    <hr>
+    <h3>🔒 Change Password</h3>
+    {{ password_form.as_p }}
+
+    <button type="submit">💾 Save Changes</button>
+  </form>
+
+  <script>
+    function toggleOtherGenreInput() {
+      const genreSelect = document.getElementById("genre-select");
+      const otherDiv = document.getElementById("other-genre-div");
+      otherDiv.style.display = genreSelect.value === "Other" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>

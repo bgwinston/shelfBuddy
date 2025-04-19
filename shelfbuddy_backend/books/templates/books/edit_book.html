@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'reading/base.html' %}
+
+{% block content %}
   <title>Edit Book</title>
   <style>
     body {
@@ -80,14 +80,12 @@
     <textarea name="description" rows="4">{{ book.description }}</textarea>
 
     <label>Genre (choose one):</label>
-        <select name="genre_existing">
-          <option value="">-- Select a Genre --</option>
-          {% for genre_option in genres %}
-            <option value="{{ genre_option }}" {% if genre_option == book.genre %}selected{% endif %}>
-              {{ genre_option }}
-            </option>
-          {% endfor %}
-        </select><br>
+    <select name="genre_existing">
+      <option value="">-- Select a Genre --</option>
+      {% for genre_option in genres %}
+        <option value="{{ genre_option }}" {% if genre_option == book.genre %}selected{% endif %}>{{ genre_option }}</option>
+      {% endfor %}
+    </select><br>
 
     <label>Or enter a new genre:</label>
     <input type="text" name="genre_new" placeholder="e.g. Sci-Fi, Historical..." value=""><br>
@@ -97,11 +95,11 @@
       <option value="my" {% if not book.is_public_library %}selected{% endif %}>My Library</option>
       <option value="public" {% if book.is_public_library %}selected{% endif %}>Public Library</option>
     </select>
-    
+
     <div id="public-library-details">
       <label>Library Name:</label>
       <input type="text" name="library_name" value="{{ book.library_name|default:'' }}" placeholder="e.g. City Library">
-    
+
       <label>Due Date:</label>
       <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
     </div>
@@ -111,11 +109,14 @@
       <option value="no" {% if not book.is_loaned %}selected{% endif %}>No</option>
       <option value="yes" {% if book.is_loaned %}selected{% endif %}>Yes</option>
     </select>
-    
+
     <div id="loan-details">
       <label>Loaned To:</label>
       <input type="text" name="loaned_to" value="{{ book.loaned_to|default:'' }}" placeholder="e.g. John, Sarah">
-    
+
+      <label>Phone Number:</label>
+      <input type="text" name="loaned_to_phone" value="{{ book.loaned_to_phone|default:'' }}" placeholder="e.g. 555-123-4567">
+
       <label>Due Date:</label>
       <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
     </div>
@@ -123,13 +124,14 @@
     <div class="form-buttons">
       <button type="submit" class="save-btn">💾 Save Changes</button>
     </div>
-    </form>
-    <form method="post" action="{% url 'delete_book' book.id %}" onsubmit="return confirm('Are you sure you want to delete this book?');">
-      {% csrf_token %}
-      <button type="submit" class="delete-btn">🗑️ Delete Book</button>
-    </form>
-  </div>
+  </form>
+  <form method="post" action="{% url 'delete_book' book.id %}" onsubmit="return confirm('Are you sure you want to delete this book?');">
+    {% csrf_token %}
+    <button type="submit" class="delete-btn">🗑️ Delete Book</button>
+  </form>
+
   <a href="{% url 'mylibrary' %}">← Back to My Library</a>
+
   <!---Hide and show fields using javascript-->
   <script>
     const loanedSelect = document.getElementById("is-loaned");
@@ -154,4 +156,4 @@
     librarySelect.addEventListener("change", toggleLibraryFields);
   </script>
 </body>
-</html>
+{% endblock %}

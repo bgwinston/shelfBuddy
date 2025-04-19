@@ -1,0 +1,44 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+  <h2>📘 Reading Plan for <em>{{ plan.book.title }}</em></h2>
+
+  <p><strong>Start Date:</strong> {{ plan.start_date }}</p>
+  <p><strong>Target End Date:</strong> {{ plan.target_end_date }}</p>
+  <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
+  <p><strong>Total Pages Read:</strong> {{ total_read }}</p>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" style="height: 24px; background-color: #e0e0e0; border-radius: 12px; overflow: hidden; margin: 20px 0;">
+    <div class="progress-fill" style="
+      height: 100%;
+      width: {{ plan.percent_complete }}%;
+      background-color: #4CAF50;
+      text-align: center;
+      color: white;
+      line-height: 24px;
+      font-weight: bold;
+    ">
+      {{ plan.percent_complete }}%
+    </div>
+  </div>
+
+  <!-- Progress Log -->
+  <h3>📚 Progress Log</h3>
+  {% if progress %}
+    <ul>
+      {% for entry in progress %}
+        <li><strong>{{ entry.date }}</strong> — {{ entry.pages_read }} pages</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No progress logged yet.</p>
+  {% endif %}
+
+  <!-- Action Buttons -->
+  <div style="margin-top: 20px;">
+    <a href="{% url 'log_progress' plan.id %}" style="margin-right: 10px;" class="button">➕ Log Progress</a>
+    <a href="{% url 'weekly_report' %}" style="margin-right: 10px;" class="button">📈 Weekly Report</a>
+    <a href="{% url 'check_falling_behind' %}" class="button">⚠️ Behind Alerts</a>
+  </div>
+{% endblock %}

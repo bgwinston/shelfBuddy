@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #f4f4f4;
+      border-radius: 10px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .info {
+      margin: 15px 0;
+    }
+
+    .info label {
+      font-weight: bold;
+      display: inline-block;
+      width: 150px;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    a.button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>👤 Your Profile</h2>
+
+  <div class="info"><label>First Name:</label> {{ user.first_name }}</div>
+  <div class="info"><label>Username:</label> {{ user.username }}</div>
+  <div class="info"><label>Email:</label> {{ user.email }}</div>
+  <div class="info"><label>Favorite Genre:</label> {{ user.favorite_genre }}</div>
+
+  <a href="{% url 'edit_profile' %}" class="button">✏️ Edit Profile</a>
+</body>
+</html>

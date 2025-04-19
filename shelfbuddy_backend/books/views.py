@@ -66,7 +66,7 @@ def book_search(request):
         context['results'] = books
         context['search_query'] = request.GET.get('q')
 
-    return render(request, 'booksearch.html', context)
+    return render(request, 'books/booksearch.html', context)
 
 def book_view(request, book_id):
     user_id = request.session.get('user_id')
@@ -93,7 +93,7 @@ def book_view(request, book_id):
         'google_book_id': book_id,
     }
 
-    return render(request, 'bookview.html', {'book': book})
+    return render(request, 'books/bookview.html', {'book': book})
 
 def save_book_view(request):
     user_id = request.session.get('user_id')
@@ -136,18 +136,14 @@ def my_library_view(request):
         return redirect('login')
 
     books = Book.objects.filter(user=user)  # loads all fields
-    return render(request, 'mylibrary.html', {'books': books})
+    return render(request, 'books/mylibrary.html', {'books': books})
 
 def edit_book(request, book_id):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
 
-    try:
-        user = CustomUser.objects.get(id=user_id)
-    except CustomUser.DoesNotExist:
-        return redirect('login')
-
+    user = CustomUser.objects.get(id=user_id)
     book = get_object_or_404(Book, id=book_id, user=user)
 
     if request.method == 'POST':
@@ -155,22 +151,24 @@ def edit_book(request, book_id):
         book.author = request.POST.get('author')
         book.description = request.POST.get('description')
 
-        # Genre (choose or enter new)
         genre_existing = request.POST.get('genre_existing')
         genre_new = request.POST.get('genre_new')
         book.genre = genre_new.strip() if genre_new else genre_existing
 
-        # Library type
+        # 📚 Loan info fields (put them here 👇)
+        book.loaned_to = request.POST.get('loaned_to', '').strip()
+        book.loaned_to_phone = request.POST.get('loaned_to_phone', '').strip()
+
+        # 📚 Library type
         library_type = request.POST.get('library_type')
         book.is_public_library = (library_type == 'public')
         book.library_name = request.POST.get('library_name', '').strip() if book.is_public_library else ''
 
-        # Loaned info
+        # 📚 Loan status
         is_loaned = request.POST.get('is_loaned')
         book.is_loaned = (is_loaned == 'yes')
-        book.loaned_to = request.POST.get('loaned_to', '').strip() if book.is_loaned else ''
 
-        # Due date (used for both public library and loaned)
+        # 📅 Due date
         due_date_str = request.POST.get('due_date')
         if due_date_str:
             try:
@@ -183,7 +181,7 @@ def edit_book(request, book_id):
         book.save()
         return redirect('mylibrary')
 
-    return render(request, 'edit_book.html', {
+    return render(request, 'books/edit_book.html', {
         'book': book,
         'genres': GENRE_CHOICES
     })
@@ -218,4 +216,12 @@ def mybookshelf_view(request, book_id):
 
     book = get_object_or_404(Book, id=book_id, user=user)
 
-    return render(request, 'mybookshelf.html', {'book': book})
+    return render(request, 'books/mybookshelf.html', {'book': book})
+
+def loaned_books_view(request):
+    user = request.user  # assuming session auth is still in place
+    loaned_books = Book.objects.filter(user=user, is_loaned=True)
+
+    return render(request, 'books/loaned_books.html', {
+        'loaned_books': loaned_books
+    })

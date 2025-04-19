@@ -1,0 +1,9 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+<h2>Log Reading Progress for {{ plan.book.title }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log</button>
+{% endblock %}

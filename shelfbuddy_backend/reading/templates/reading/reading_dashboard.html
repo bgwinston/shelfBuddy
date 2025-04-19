@@ -1,0 +1,32 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+<h2>📚 My Reading Plans</h2>
+
+{% if plans %}
+  <div style="margin-top: 20px;">
+    {% for plan in plans %}
+      <div style="border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+        <h3>{{ plan.book.title }}</h3>
+        <p><strong>Start Date:</strong> {{ plan.start_date }}</p>
+        <p><strong>Target End Date:</strong> {{ plan.target_end_date }}</p>
+        <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
+        <p><strong>Total Pages Read:</strong> {{ plan.total_pages_read }}</p>
+
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: {{ plan.percent_complete }}%;">
+            {{ plan.percent_complete }}%
+          </div>
+        </div>
+
+        <a href="{% url 'reading_plan_detail' plan.id %}" class="button">View Details</a>
+        <a href="{% url 'log_progress' plan.id %}" class="button">Log Progress</a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>You don't have any active reading plans yet.</p>
+  <a href="{% url 'create_reading_plan' %}" class="button">➕ Create a New Plan</a>
+{% endif %}
+
+{% endblock %}

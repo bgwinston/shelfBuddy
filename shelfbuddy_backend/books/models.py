@@ -20,8 +20,14 @@ class Book(models.Model):
     ]
     status = models.CharField(max_length=20, choices=READING_STATUS_CHOICES, default='not_started')
 
+# books/models.py
+    loaned_to = models.CharField(max_length=100, blank=True, null=True)
+    loaned_to_phone = models.CharField(max_length=20, blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+
     is_public = models.BooleanField(default=False)
     is_loaned = models.BooleanField(default=False)
+    loaned_to_phone = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f"{self.title} by {self.author}"
