@@ -8,7 +8,6 @@ class Book(models.Model):
     title = models.CharField(max_length=500)
     author = models.CharField(max_length=500)
     source = models.CharField(max_length=20, default='manual')
-    library_name = models.CharField(max_length=100, blank=True, null=True)
     
     date_added = models.DateTimeField(auto_now_add=True)
     genre = models.CharField(max_length=100, blank=True)

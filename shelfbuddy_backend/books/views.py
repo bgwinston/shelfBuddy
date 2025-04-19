@@ -2,8 +2,7 @@ import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 from users.models import CustomUser  
-from datetime import datetime
-
+import datetime
 
 GENRE_CHOICES = [
     'Fiction',
@@ -151,6 +150,7 @@ def edit_book(request, book_id):
         book.author = request.POST.get('author')
         book.description = request.POST.get('description')
 
+        # Genre: use new if provided, else use selected
         genre_existing = request.POST.get('genre_existing')
         genre_new = request.POST.get('genre_new')
         book.genre = genre_new.strip() if genre_new else genre_existing
@@ -183,7 +183,7 @@ def edit_book(request, book_id):
 
     return render(request, 'books/edit_book.html', {
         'book': book,
-        'genres': GENRE_CHOICES
+        'genres': GENRE_CHOICES  # 🔥 Pass to template
     })
 
 def delete_book(request, book_id):
