@@ -1,4 +1,4 @@
-from .views import create_reading_plan, reading_plan_detail, log_progress, weekly_report, check_falling_behind,reading_dashboard
+from .views import create_reading_plan, reading_plan_detail, log_progress, weekly_report, check_falling_behind,reading_dashboard, create_goal_view
 from django.urls import path
 
 
@@ -9,4 +9,5 @@ path('reading/<int:plan_id>/log/', log_progress, name='log_progress'),
 path('reading/weekly-report/', weekly_report, name='weekly_report'),
 path('reading/behind/', check_falling_behind, name='check_falling_behind'),
 path('reading/dashboard', reading_dashboard, name='reading_dashboard'),
+path('goals/create/', create_goal_view, name='create_goal'),
 ]

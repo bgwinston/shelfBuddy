@@ -43,12 +43,14 @@
     </style>
 </head>
 <body>
-    <nav>
+    <nav style="display: flex; flex-wrap: wrap; gap: 10px;">
         <a href="{% url 'dashboard' %}" class="button">🏠 Home</a>
-        <a href="{% url 'reading_dashboard' %}">📈 Reading Progress</a>
-        <a href="{% url 'mylibrary' %}">📘 My Library</a>
-        <a href="{% url 'loaned_books' %}">📕 View Loaned Books</a>
-        <a href="{% url 'profile' %}">👤 Profile</a>
+        <a href="{% url 'booksearch' %}" class="button">➕ Search for books</a>
+        <a href="{% url 'reading_dashboard' %}" class="button">📈 Reading Progress</a>
+        <a href="{% url 'mylibrary' %}" class="button">📘 My Library</a>
+        <a href="{% url 'loaned_books' %}" class="button">📕 View Loaned Books</a>
+        <a href="{% url 'wishlist' %}" class="button">📚 My Wishlist</a>
+        <a href="{% url 'profile' %}" class="button">👤 Profile</a>
     </nav>
     <hr>
 

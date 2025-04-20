@@ -1,0 +1,23 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+  <h2>{{ book.title }}</h2>
+
+  <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    {% if book.cover_image %}
+      <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="150">
+    {% endif %}
+
+    <div>
+      <p><strong>Author:</strong> {{ book.author }}</p>
+      <p><strong>Genre:</strong> {{ book.genre|default:"N/A" }}</p>
+      <p><strong>Status:</strong> {{ book.status|default:"-" }}</p>
+      <p><strong>From Public Library:</strong> {{ book.is_public_library|yesno:"Yes,No" }}</p>
+      <p><strong>Loaned:</strong> {{ book.is_loaned|yesno:"Yes,No" }}</p>
+      <p><strong>Due Date:</strong> {{ book.due_date|date:"M d, Y" }}</p>
+
+
+      <a href="{% url 'edit_book' book.id %}" class="button">✏️ Edit Book</a>
+    </div>
+  </div>
+{% endblock %}

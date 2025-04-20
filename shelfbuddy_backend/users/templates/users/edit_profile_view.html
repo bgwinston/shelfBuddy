@@ -1,65 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Edit Profile</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      background-color: #f9f9f9;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    }
-    h2, h3 {
-      text-align: center;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .success {
-      color: green;
-      text-align: center;
-    }
-    .error {
-      color: red;
-      text-align: center;
-    }
-    ul.error li {
-      color: red;
-      list-style: none;
-      margin-top: 5px;
-    }
-  </style>
-</head>
-<body>
+{% extends 'reading/base.html' %}
+
+{% block content %}
   <h2>Edit Profile</h2>
 
   {% if success %}
@@ -95,17 +36,15 @@
     <label>Favorite Genre:</label>
     <select name="favorite_genre" id="genre-select" onchange="toggleOtherGenreInput()">
       <option value="">--Select Genre--</option>
-      <option value="Fantasy" {% if user.favorite_genre == "Fantasy" %}selected{% endif %}>Fantasy</option>
-      <option value="Mystery" {% if user.favorite_genre == "Mystery" %}selected{% endif %}>Mystery</option>
-      <option value="Science Fiction" {% if user.favorite_genre == "Science Fiction" %}selected{% endif %}>Science Fiction</option>
-      <option value="Romance" {% if user.favorite_genre == "Romance" %}selected{% endif %}>Romance</option>
-      <option value="Nonfiction" {% if user.favorite_genre == "Nonfiction" %}selected{% endif %}>Nonfiction</option>
-      <option value="Other" {% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}selected{% endif %}>Other</option>
+      {% for genre in genres %}
+        <option value="{{ genre }}" {% if user.favorite_genre == genre %}selected{% endif %}>{{ genre }}</option>
+      {% endfor %}
+      <option value="Other" {% if user.favorite_genre not in genres %}selected{% endif %}>Other</option>
     </select>
 
-    <div id="other-genre-div" style="display: {% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}block{% else %}none{% endif %};">
+    <div id="other-genre-div" style="display: {% if user.favorite_genre not in genres %}block{% else %}none{% endif %};">
       <label>Other Genre:</label>
-      <input type="text" name="other_genre" value="{% if user.favorite_genre not in ["Fantasy", "Mystery", "Science Fiction", "Romance", "Nonfiction"] %}{{ user.favorite_genre }}{% endif %}">
+      <input type="text" name="other_genre" value="{% if user.favorite_genre not in genres %}{{ user.favorite_genre }}{% endif %}">
     </div>
 
     <hr>
@@ -122,5 +61,4 @@
       otherDiv.style.display = genreSelect.value === "Other" ? "block" : "none";
     }
   </script>
-</body>
-</html>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import ReadingPlan, ReadingProgress
+from .models import ReadingPlan, ReadingProgress, ReadingGoal
 
 class ReadingPlanForm(forms.ModelForm):
     class Meta:
@@ -14,3 +14,7 @@ class ReadingProgressForm(forms.ModelForm):
     class Meta:
         model = ReadingProgress
         fields = ['pages_read']
+class ReadingGoalForm(forms.ModelForm):
+    class Meta:
+        model = ReadingGoal
+        fields = ['goal_type', 'target_amount', 'time_period']

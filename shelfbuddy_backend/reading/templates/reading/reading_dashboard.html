@@ -1,7 +1,15 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
-<h2>📚 My Reading Plans</h2>
+<h2 style="display: flex; justify-content: space-between; align-items: center;">
+  📚 My Reading Plans
+  <span>
+    <a href="{% url 'create_reading_plan' %}" class="button" style="font-size: 0.8em;">➕ Create Plan</a>
+    <a href="{% url 'create_goal' %}" class="button" style="font-size: 0.8em; margin-left: 8px;">🎯 Set Goal</a>
+    <a href="{% url 'weekly_report' %}" class="button" style="font-size: 0.8em; margin-left: 8px;">📈 Weekly Report</a>
+    <a href="{% url 'check_falling_behind' %}" class="button" style="font-size: 0.8em; margin-left: 8px;">📉 Behind?</a>
+  </span>
+</h2>
 
 {% if plans %}
   <div style="margin-top: 20px;">
@@ -26,7 +34,27 @@
   </div>
 {% else %}
   <p>You don't have any active reading plans yet.</p>
-  <a href="{% url 'create_reading_plan' %}" class="button">➕ Create a New Plan</a>
 {% endif %}
 
+<hr style="margin: 40px 0;">
+
+<h2>🎯 My Reading Goals</h2>
+
+{% if goals %}
+  <ul style="margin-top: 15px;">
+    {% for goal in goals %}
+      <li style="margin-bottom: 10px;">
+        <strong>{{ goal.name }}</strong> —
+        {{ goal.target_amount }} {{ goal.goal_type }} by {{ goal.end_date }}
+        {% if goal.completed %}
+          ✅ <em>Completed</em>
+        {% else %}
+          🔄 <em>In Progress</em>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no active reading goals.</p>
+{% endif %}
 {% endblock %}

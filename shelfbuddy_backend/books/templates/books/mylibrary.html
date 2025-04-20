@@ -37,6 +37,7 @@
         <th>Public Library</th>
         <th>Loaned</th>
         <th>Due Date</th>
+        <th>Rating</th>
       </tr>
     </thead>
     <tbody>
@@ -49,13 +50,26 @@
               <em>No cover</em>
             {% endif %}
           </td>
-         <td><a href="{% url 'edit_book' book.id %}">{{ book.title }}</a></td> 
+          <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
         <td>{{ book.genre|default:"N/A" }}</td>
         <td>{{ book.status|default:"-" }}</td>
         <td>{% if book.is_public_library %}<span class="checkmark">✔</span>{% endif %}</td>
         <td>{% if book.is_loaned %}<span class="checkmark">✔</span>{% endif %}</td>
         <td>{{ book.due_date|date:"M d, Y" }}</td>
+        <td>
+          {% if book.rating %}
+            {% for i in "12345"|make_list %}
+              {% if book.rating >= i|add:"0" %}
+                <span style="color:gold;">&#9733;</span>
+              {% else %}
+                <span style="color:#ccc;">&#9733;</span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <span style="color:#888;">Not yet rated</span>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>
