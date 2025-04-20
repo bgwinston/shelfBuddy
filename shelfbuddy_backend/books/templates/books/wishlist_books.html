@@ -1,0 +1,45 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+  <h2>📝 My Wishlist</h2>
+
+  {% if books %}
+    <table style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Genre</th>
+          <th>Added</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td>
+              {% if book.cover_image %}
+                <img src="{{ book.cover_image }}" alt="Cover" height="75">
+              {% else %}
+                <em>No cover</em>
+              {% endif %}
+            </td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.genre|default:"N/A" }}</td>
+            <td>{{ book.date_added|date:"M d, Y" }}</td>
+            <td>
+              <form method="post" action="{% url 'move_to_library' book.id %}">
+                {% csrf_token %}
+                <button type="submit">📚 Move to Library</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Your wishlist is currently empty.</p>
+  {% endif %}
+{% endblock %}

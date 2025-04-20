@@ -1,0 +1,64 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+  <h2>Edit Profile</h2>
+
+  {% if success %}
+    <p class="success">{{ success }}</p>
+  {% endif %}
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+
+  {% if password_form.errors %}
+    <ul class="error">
+      {% for field, errors in password_form.errors.items %}
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <label>First Name:</label>
+    <input type="text" name="first_name" value="{{ user.first_name }}" required>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ user.username }}" required>
+
+    <label>Favorite Genre:</label>
+    <select name="favorite_genre" id="genre-select" onchange="toggleOtherGenreInput()">
+      <option value="">--Select Genre--</option>
+      {% for genre in genres %}
+        <option value="{{ genre }}" {% if user.favorite_genre == genre %}selected{% endif %}>{{ genre }}</option>
+      {% endfor %}
+      <option value="Other" {% if user.favorite_genre not in genres %}selected{% endif %}>Other</option>
+    </select>
+
+    <div id="other-genre-div" style="display: {% if user.favorite_genre not in genres %}block{% else %}none{% endif %};">
+      <label>Other Genre:</label>
+      <input type="text" name="other_genre" value="{% if user.favorite_genre not in genres %}{{ user.favorite_genre }}{% endif %}">
+    </div>
+
+    <hr>
+    <h3>🔒 Change Password</h3>
+    {{ password_form.as_p }}
+
+    <button type="submit">💾 Save Changes</button>
+  </form>
+
+  <script>
+    function toggleOtherGenreInput() {
+      const genreSelect = document.getElementById("genre-select");
+      const otherDiv = document.getElementById("other-genre-div");
+      otherDiv.style.display = genreSelect.value === "Other" ? "block" : "none";
+    }
+  </script>
+{% endblock %}
