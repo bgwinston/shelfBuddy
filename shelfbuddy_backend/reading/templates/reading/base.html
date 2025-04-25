@@ -1,59 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>📚 Reading Tracker</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        nav a {
-            margin-right: 15px;
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .progress-bar {
-            height: 20px;
-            background-color: #eee;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        .progress-fill {
-            height: 100%;
-            background-color: #4CAF50;
-            text-align: center;
-            color: white;
-            line-height: 20px;
-        }
-        .button {
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 10px;
-            padding: 8px 14px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <nav style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <a href="{% url 'dashboard' %}" class="button">🏠 Home</a>
-        <a href="{% url 'booksearch' %}" class="button">➕ Search for books</a>
-        <a href="{% url 'reading_dashboard' %}" class="button">📈 Reading Progress</a>
-        <a href="{% url 'mylibrary' %}" class="button">📘 My Library</a>
-        <a href="{% url 'loaned_books' %}" class="button">📕 View Loaned Books</a>
-        <a href="{% url 'wishlist' %}" class="button">📚 My Wishlist</a>
-        <a href="{% url 'profile' %}" class="button">👤 Profile</a>
+
+    <!-- Top Banner -->
+    <header class="top-header">
+        <div class="top-left">
+            <img src="{% static 'images/ShelfBuddy.png' %}" alt="ShelfBuddy Logo">
+        </div>
+        <div class="top-center">
+            <h1 class="page-title">
+                Welcome to ShelfBuddy{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}!
+            </h1>        </div>
+        <div class="top-right">
+            <a href="{% url 'profile' %}" class="profile-link">👤 Profile</a>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">🚪 Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Sticky Nav Bar -->
+    <nav class="sticky-navbar">
+        <a href="{% url 'dashboard' %}">🏠 Home</a>
+        <a href="{% url 'booksearch' %}">➕ Search Books</a>
+        <a href="{% url 'reading_dashboard' %}">📈 Progress</a>
+        <a href="{% url 'mylibrary' %}">📘 Library</a>
+        <a href="{% url 'loaned_books' %}">📕 Loans</a>
+        <a href="{% url 'wishlist' %}">📚 Wishlist</a>
     </nav>
+
     <hr>
 
     {% block content %}{% endblock %}
+
 </body>
 </html>

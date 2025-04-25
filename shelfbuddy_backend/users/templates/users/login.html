@@ -1,18 +1,44 @@
-<!-- users/templates/users/login.html -->
-<h2>Login</h2>
-{% if success %}
-  <p style="color:green">{{ success }}</p>
-{% endif %}
-<form method="POST">
-  {% csrf_token %}
-  <label>Username:</label>
-  <input type="text" name="username" required><br>
-  <label>Password:</label>
-  <input type="password" name="password" required><br>
-  <button type="submit">Login</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | ShelfBuddy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="login-background">
 
-<!---add forgot password link-->
-{% if error %}
-  <p style="color:red">{{ error }}</p>
-{% endif %}
+  <div class="login-container">
+    <h2>Login to ShelfBuddy</h2>
+
+    {% if success %}
+      <p class="success-msg">{{ success }}</p>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Username:</label>
+      <input type="text" name="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Login</button>
+
+      <div class="forgot-password">
+        <a href="#">Forgot your password?</a>
+      </div>
+    
+      <div class="forgot-password" style="margin-top: 12px;">
+        Don't have an account?
+        <a href="{% url 'register' %}">Create one here</a>
+      </div>
+    </form>
+
+    {% if error %}
+      <p class="error-msg">{{ error }}</p>
+    {% endif %}
+  </div>
+
+</body>
+</html>

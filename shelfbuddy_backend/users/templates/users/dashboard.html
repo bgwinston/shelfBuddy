@@ -1,16 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Bookshelf Dashboard</title>
-</head>
-<body>
-  <h2>Welcome {{ first_name }} to your Bookshelf! 📚</h2>
+{% extends 'reading/base.html' %}
+{% block content %}
+<h1 class="dashboard-heading">📚 Your Bookshelf Dashboard</h1>
 
-  <p>Here you can manage your books, wishlist, and reading progress.</p>
+<div class="dashboard-grid"> <!-- ✅ Add wrapper -->
 
-  <a href="{% url 'booksearch' %}">➕ Search for books</a><br>
-  <a href="{% url 'reading_dashboard' %}">📈 View Reading Progress</a><br>
-  <a href="{% url 'mylibrary' %}">View books in Library</a>
-  <a href="{% url 'logout' %}">Logout</a><br>
-</body>
-</html>
+  <div class="dashboard-section">
+    <h2>📖 Currently Reading</h2>
+    <ul>
+      {% for book in currently_reading %}
+        <li>{{ book.title }} by {{ book.author }}</li>
+      {% empty %}
+        <li>No books in progress.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>🆕 Recently Added Books</h2>
+    <ul>
+      {% for book in recent_books %}
+        <li>{{ book.title }}</li>
+      {% empty %}
+        <li>No recent books.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>⏰ Overdue Books</h2>
+    <ul>
+      {% for book in overdue_books %}
+        <li>{{ book.title }} (Due: {{ book.due_date|date:"M d" }})</li>
+      {% empty %}
+        <li>No overdue books.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>🎯 Wishlist</h2>
+    <ul>
+      {% for book in wishlist_books %}
+        <li>{{ book.title }}</li>
+      {% empty %}
+        <li>No books in wishlist.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div> <!-- ✅ Close wrapper -->
+{% endblock %}

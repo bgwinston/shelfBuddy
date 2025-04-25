@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.utils.timezone import now
+from reading.models import Book  
 
-User = get_user_model()
 
 def register_view(request):
     if request.method == 'POST':
@@ -137,3 +138,25 @@ def edit_profile_view(request):
         'password_form': password_form,
         'genres': GENRES
     })
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
+
+
+def dashboard_view(request):
+    user = request.user
+
+    currently_reading = Book.objects.filter(user=user, status='in_progress')[:4]
+    recent_books = Book.objects.filter(user=user).order_by('-date_added')[:4]
+    overdue_books = Book.objects.filter(user=user, is_loaned=True, due_date__lt=now())[:4]
+    wishlist_books = Book.objects.filter(user=user, is_wishlist=True)[:4]
+
+    context = {
+        'currently_reading': currently_reading,
+        'recent_books': recent_books,
+        'overdue_books': overdue_books,
+        'wishlist_books': wishlist_books,
+    }
+
+    return render(request, 'users/dashboard.html', context)
