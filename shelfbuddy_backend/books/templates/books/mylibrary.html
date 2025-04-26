@@ -1,32 +1,21 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
-<head>
-  <title>📚 My Library</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-    th, td {
-      border-bottom: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    img {
-      height: 75px;
-    }
-    .checkmark {
-      font-size: 1.5em;
-      color: green;
-    }
-  </style>
-</head>
-<body>
-  <h2>📚 My Library Snapshot</h2>
 
-  {% if books %}
-  <table>
+<h2>📚 My Library Snapshot</h2>
+
+<!-- Search Form -->
+<form method="GET" action="{% url 'mylibrary' %}" class="library-search-form" style="margin-bottom: 20px;">
+  <input type="text" name="q" placeholder="Search your library..." value="{{ request.GET.q }}" required>
+  <button type="submit" class="button">🔍 Search</button>
+  {% if request.GET.q %}
+    <a href="{% url 'mylibrary' %}" class="button button-turquoise" style="margin-left: 10px;">🔄 Reset</a>
+  {% endif %}
+</form>
+
+<!-- Book Table -->
+{% if books %}
+  <table style="border-collapse: collapse; width: 100%;">
     <thead>
       <tr>
         <th>Cover</th>
@@ -34,7 +23,7 @@
         <th>Author</th>
         <th>Genre</th>
         <th>Status</th>
-        <th>Public Library</th>
+        <th>Public</th>
         <th>Loaned</th>
         <th>Due Date</th>
         <th>Rating</th>
@@ -44,18 +33,18 @@
       {% for book in books %}
       <tr>
         <td>
-            {% if book.cover_image %}
-              <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="100">
-            {% else %}
-              <em>No cover</em>
-            {% endif %}
-          </td>
-          <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
+          {% if book.cover_image %}
+            <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="75">
+          {% else %}
+            <em>No cover</em>
+          {% endif %}
+        </td>
+        <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
         <td>{{ book.genre|default:"N/A" }}</td>
         <td>{{ book.status|default:"-" }}</td>
-        <td>{% if book.is_public_library %}<span class="checkmark">✔</span>{% endif %}</td>
-        <td>{% if book.is_loaned %}<span class="checkmark">✔</span>{% endif %}</td>
+        <td>{% if book.is_public_library %}<span style="color:green;">✔</span>{% endif %}</td>
+        <td>{% if book.is_loaned %}<span style="color:red;">✔</span>{% endif %}</td>
         <td>{{ book.due_date|date:"M d, Y" }}</td>
         <td>
           {% if book.rating %}
@@ -74,8 +63,8 @@
       {% endfor %}
     </tbody>
   </table>
-  {% else %}
-    <p>You haven't added any books yet.</p>
-  {% endif %}
-</body>
+{% else %}
+  <p>You haven't added any books yet.</p>
+{% endif %}
+
 {% endblock %}

@@ -21,7 +21,14 @@
   <div style="margin-top: 20px;">
     {% for plan in plans %}
     <div class="plan-card">
-      <h3>{{ plan.book.title }}</h3>
+      <h3>
+        {{ plan.book.title }}
+        
+        {% if plan in behind_alerts %}
+          <span style="color: red; font-size: 1.2em; margin-left: 8px;">🚨</span>
+        {% endif %}
+      </h3>
+    
       <p><strong>Start:</strong> {{ plan.start_date|date:"M d, Y" }}</p>
       <p><strong>End:</strong> {{ plan.target_end_date|date:"M d, Y" }}</p>
       <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
@@ -29,7 +36,7 @@
     
       <div class="progress-bar-container">
         <div class="progress-bar">
-          <div class="progress-fill" style="width: {{ plan.percent_complete|floatformat:0 }}%;">
+          <div class="progress-fill progress-green" style="width: {{ plan.percent_complete|floatformat:0 }}%;">
             {{ plan.percent_complete|floatformat:0 }}%
           </div>
         </div>
@@ -61,7 +68,7 @@
         {% endif %}
 
         <!-- ✅ Delete button -->
-        <a href="{% url 'delete_goal' goal.id %}" class="button" style="font-size: 0.7em; background-color: #D32F2F; margin-left: 10px;">
+        <a href="{% url 'delete_goal' goal.id %}" class="button"    style="font-size: 1em; padding: 8px 14px; background-color: #D32F2F; margin-left: 10px; border-radius: 6px; color: white;">
           🗑️ Delete
         </a>
       </li>

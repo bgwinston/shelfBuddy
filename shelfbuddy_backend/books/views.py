@@ -262,3 +262,18 @@ def move_to_library(request, book_id):
     book.save()
     messages.success(request, f'"{book.title}" was successfully moved to your library.')
     return redirect('wishlist')
+
+from django.db.models import Q
+
+@login_required
+def my_library_view(request):
+    query = request.GET.get('q')
+    if query:
+        books = Book.objects.filter(
+            Q(user=request.user),
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
+    else:
+        books = Book.objects.filter(user=request.user)
+    
+    return render(request, 'books/mylibrary.html', {'books': books})
