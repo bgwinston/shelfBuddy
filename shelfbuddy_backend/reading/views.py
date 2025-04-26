@@ -122,9 +122,24 @@ def reading_dashboard(request):
 
     for plan in plans:
         total_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-        total_days = (today - plan.start_date).days + 1
-        expected_pages = plan.daily_target_pages * total_days
 
+        # ✅ Calculate percentage complete
+        total_days = (plan.target_end_date - plan.start_date).days + 1
+        total_goal_pages = plan.daily_target_pages * total_days
+
+        if total_goal_pages > 0:
+            percent_complete = (total_read / total_goal_pages) * 100
+        else:
+            percent_complete = 0
+
+        # Cap at 100%
+        if percent_complete > 100:
+            percent_complete = 100
+
+        plan.percent_complete = round(percent_complete, 1)
+
+        # ✅ Handle behind alerts
+        expected_pages = plan.daily_target_pages * (today - plan.start_date).days + 1
         if total_read < expected_pages:
             behind_alerts.append(plan)
 
