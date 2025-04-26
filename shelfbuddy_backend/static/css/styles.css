@@ -293,3 +293,905 @@ body {
   .profile-container a.button:hover {
     background-color: #0056b3;
   }
+  body.profile-page {
+    background-color: #f4f4f4; /* Off white background for whole profile page */
+  }
+  .add-book-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .add-book-page h2, .add-book-page h3 {
+    text-align: center;
+    color: #2C2A41;
+  }
+  
+  .search-result-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    background-color: #fafafa;
+  }
+  
+  .thumbnail {
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .view-details-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background-color: #A6C048;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .view-details-link:hover {
+    background-color: #D32F2F;
+  }
+  /* Background for the add book page */
+body.add-book-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered container */
+  .add-book-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center; /* Center headings */
+  }
+  
+  /* Center the forms inside */
+  .center-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .center-form input,
+  .center-form select,
+  .center-form textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .center-form button {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    background-color: #A6C048;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .center-form button:hover {
+    background-color: #D32F2F;
+  }
+  
+  /* Styling search results */
+  .search-result-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: 8px;
+    background-color: #fafafa;
+    max-width: 600px;
+    text-align: left;
+  }
+  
+  .thumbnail {
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .view-details-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background-color: #A6C048;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .view-details-link:hover {
+    background-color: #D32F2F;
+  }
+  .create-goal-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .create-goal-page h2 {
+    color: #2C2A41;
+    margin-bottom: 20px;
+  }
+  
+  .create-goal-page label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: bold;
+  }
+  
+  .create-goal-page select {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .center-goal-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .center-goal-form input,
+  .center-goal-form select,
+  .center-goal-form textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .center-goal-form button {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    background-color: #A6C048;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .center-goal-form button:hover {
+    background-color: #D32F2F;
+  }
+  body.create-goal-page-background {
+    background-color: #f4f4f4;
+  }
+  /* Off-white background for the create plan page */
+body.create-plan-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered container */
+  .create-plan-page {
+    max-width: 700px;
+    margin: 40px auto; /* centers it */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Center the form inside */
+  .center-plan-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Form fields styling */
+  .center-plan-form input,
+  .center-plan-form select,
+  .center-plan-form textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  /* Submit button styling */
+  .center-plan-form button {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    background-color: #A6C048;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .center-plan-form button:hover {
+    background-color: #D32F2F;
+  }
+  /* Off-white background for falling behind page */
+body.falling-behind-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered container */
+  .falling-behind-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Style the list */
+  .falling-behind-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .falling-behind-list li {
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  
+  /* Style the back link */
+  .back-to-dashboard {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #2C2A41;
+    font-weight: bold;
+  }
+  
+  .back-to-dashboard:hover {
+    text-decoration: underline;
+  }
+  /* Background just for log progress page */
+body.log-progress-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered container */
+  .log-progress-page {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Center inside form */
+  .center-log-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Form field styling */
+  .center-log-form input,
+  .center-log-form select,
+  .center-log-form textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  /* Button styling */
+  .center-log-form button {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    background-color: #A6C048;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .center-log-form button:hover {
+    background-color: #D32F2F;
+  }
+  /* Background just for reading plan detail page */
+body.reading-plan-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered container */
+  .reading-plan-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Progress Log List */
+  .progress-log {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .progress-log li {
+    margin-bottom: 10px;
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  
+  /* Buttons container */
+  .reading-plan-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  /* Button Styling (reuse your site button styles) */
+  .reading-plan-buttons .button {
+    padding: 10px 20px;
+    background-color: #A6C048;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reading-plan-buttons .button:hover {
+    background-color: #D32F2F;
+  }
+  body.reading-plan-page-background {
+    background-color: #f4f4f4;
+  }
+  
+  .reading-plan-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Info Section */
+  .plan-info p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Progress Bar */
+  .progress-bar-container {
+    margin: 20px 0;
+  }
+  
+  .progress-bar {
+    height: 24px;
+    background-color: #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
+    transition: width 0.5s ease;
+  }
+  
+  /* Progress Log */
+  .progress-log {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .progress-log li {
+    margin-bottom: 10px;
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  /* Action Buttons */
+  .reading-plan-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .reading-plan-buttons .button {
+    padding: 10px 20px;
+    background-color: #A6C048;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reading-plan-buttons .button:hover {
+    background-color: #D32F2F;
+  }
+  body.book-detail-background {
+    background-color: #f4f4f4;
+  }
+  
+  .book-details-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .book-details-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2C2A41;
+  }
+  
+  .field {
+    margin-top: 20px;
+  }
+  
+  .field label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .field-value {
+    padding: 10px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  /* Buttons */
+  .book-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .book-buttons .button {
+    padding: 10px 20px;
+    background-color: #A6C048;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .book-buttons .button:hover {
+    background-color: #D32F2F;
+  }
+  /* Background only for loaned books page */
+  .loaned-books-container {
+    background-color: #f4f4f4;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: 40px auto;
+  }
+  
+  .loaned-books-container h2 {
+    text-align: center;
+    color: #2C2A41;
+  }
+  
+  .loaned-books-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .loaned-books-table th, 
+  .loaned-books-table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .loaned-books-table th {
+    background-color: #A6C048; /* lime green from logo */
+    color: white;
+  }
+  
+  .loaned-books-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .edit-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #A6C048;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .edit-link:hover {
+    background-color: #7E9B36; /* darker green hover */
+  }
+  
+  .empty-message {
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+  }
+  
+  /* Empty message */
+  .empty-message {
+    text-align: center;
+    margin-top: 30px;
+    color: #888;
+  }
+  
+  /* Edit button */
+  .edit-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .edit-link:hover {
+    background-color: #218838;
+  }
+  /* About Page background */
+body.about-shelfbuddy-background {
+    background-color: #f4f4f4;
+  }
+  
+  /* Centered About container */
+  .about-shelfbuddy-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Title */
+  .about-shelfbuddy-container h1 {
+    color: #2C2A41;
+    margin-bottom: 20px;
+  }
+  
+  /* Subsections */
+  .about-shelfbuddy-container h2 {
+    color: #A6C048;
+    margin-top: 30px;
+  }
+  
+  /* Paragraph text */
+  .about-shelfbuddy-container p {
+    font-size: 16px;
+    margin-top: 15px;
+    color: #555;
+  }
+  
+  /* Feature List */
+  .about-features-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .about-features-list li {
+    text-align: left;
+    margin: 10px 0;
+    padding-left: 25px;
+    position: relative;
+  }
+  
+  .about-features-list li::before {
+    content: "✔️";
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  
+  /* Buttons */
+  .about-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .about-buttons .button {
+    background-color: #A6C048;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .about-buttons .button:hover {
+    background-color: #D32F2F;
+  }
+  /* Slogan on login/register page */
+.slogan-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #A6C048;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .site-footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #2C2A41;
+    color: white;
+    font-size: 14px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 40px;
+  }
+  .about-shelfbuddy-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #f4f4f4;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .about-logo img {
+    max-width: 250px; /* 📚 Make logo big but responsive */
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .about-features-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .about-features-list li {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .about-buttons {
+    margin-top: 30px;
+  }
+  
+  .about-buttons a.button {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 16px;
+    background-color: #A6C048;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .about-buttons a.button:hover {
+    background-color: #D32F2F;
+  }
+  .button-turquoise {
+    background-color: #4DB6AC;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .button-turquoise:hover {
+    background-color: #388E82; /* darker turquoise */
+  }
+  
+  .button-red {
+    background-color: #D32F2F;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .button-red:hover {
+    background-color: #B71C1C;
+  }
+
+  .progress-fill-good {
+    background-color: #4DB6AC; /* turquoise for good */
+  }
+  
+  .progress-fill-bad {
+    background-color: #D32F2F; /* red for falling behind */
+  }
+  .nav-accent {
+    height: 5px;
+    background-color: #4DB6AC;
+  }
+  .goal-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  
+  .single-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .behind-page-container {
+    background-color: #f4f4f4; /* optional soft background */
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .behind-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2C2A41;
+  }
+  
+  .behind-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .behind-list li {
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: left; /* list items left-align for readability */
+  }
+  .button-turquoise {
+    background-color: #4DB6AC;
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-turquoise:hover {
+    background-color: #388E82;
+  }
+  .edit-plan-container {
+    background-color: #f4f4f4;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-plan-container h2 {
+    margin-bottom: 20px;
+    color: #2C2A41;
+  }
+  
+  .edit-plan-container form {
+    margin-top: 20px;
+  }
+  
+  .edit-plan-container .button {
+    margin-top: 15px;
+  }
+  .behind-alert-banner {
+    background-color: #D32F2F;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  .behind-alert-banner a {
+    color: #FFFFFF;
+    text-decoration: underline;
+    margin-left: 10px;
+  }
+  
+  .behind-alert-banner a:hover {
+    text-decoration: none;
+  }
+
+  .behind-alert-banner {
+    background-color: #D32F2F;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  .behind-alert-banner a {
+    color: #FFFFFF;
+    text-decoration: underline;
+    margin-left: 10px;
+  }
+  
+  .behind-alert-banner a:hover {
+    text-decoration: none;
+  }

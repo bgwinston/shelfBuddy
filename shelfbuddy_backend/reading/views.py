@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import ReadingGoalForm
 from math import ceil
 from datetime import date
+from django.shortcuts import get_object_or_404, redirect
+from .models import ReadingGoal
 
 @login_required
 def create_reading_plan(request):
@@ -26,12 +28,26 @@ def reading_plan_detail(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
     total_read = sum(p.pages_read for p in progress)
+
+    # ✅ Calculate the percent complete
+    total_days = (plan.target_end_date - plan.start_date).days + 1
+    total_goal_pages = plan.daily_target_pages * total_days
+
+    if total_goal_pages > 0:
+        percent_complete = (total_read / total_goal_pages) * 100
+    else:
+        percent_complete = 0
+
+    if percent_complete > 100:
+        percent_complete = 100  # ✅ cap it at 100%
+
+    plan.percent_complete = round(percent_complete, 1)  # round to 1 decimal if you want
+
     return render(request, 'reading/plan_detail.html', {
         'plan': plan,
         'progress': progress,
         'total_read': total_read,
     })
-
 @login_required
 def log_progress(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
@@ -99,19 +115,23 @@ def check_falling_behind(request):
 @login_required
 def reading_dashboard(request):
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+    goals = ReadingGoal.objects.filter(user=request.user)
+
+    today = date.today()
+    behind_alerts = []
 
     for plan in plans:
-        total_read = plan.total_pages_read  # ✅ This uses the @property
+        total_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
+        total_days = (today - plan.start_date).days + 1
+        expected_pages = plan.daily_target_pages * total_days
 
-        total_days = (plan.target_end_date - plan.start_date).days + 1
-        total_goal_pages = plan.daily_target_pages * total_days
-        plan.percent_complete = round((total_read / total_goal_pages) * 100) if total_goal_pages else 0
-
-    goals = ReadingGoal.objects.filter(user=request.user)
+        if total_read < expected_pages:
+            behind_alerts.append(plan)
 
     return render(request, 'reading/reading_dashboard.html', {
         'plans': plans,
         'goals': goals,
+        'behind_alerts': behind_alerts,
     })
 @login_required
 def create_goal_view(request):
@@ -126,20 +146,27 @@ def create_goal_view(request):
         form = ReadingGoalForm()
     return render(request, 'reading/create_goal.html', {'form': form})
 
+from .models import ReadingProgress
+
+@login_required
 def check_falling_behind(request):
     today = date.today()
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
     behind = []
 
     for plan in plans:
-        # Calculate expected pages based on the days since start
-        days_passed = (today - plan.start_date).days
+        # Dynamically calculate total pages read
+        total_pages_read = sum(progress.pages_read for progress in ReadingProgress.objects.filter(plan=plan))
+        
+        # Calculate how many days have passed
+        days_passed = (today - plan.start_date).days + 1  # +1 to include today
+
         expected_pages = plan.daily_target_pages * days_passed
 
-        if plan.total_pages_read < expected_pages:
+        if total_pages_read < expected_pages:
             remaining_days = (plan.target_end_date - today).days
             total_pages = plan.book.total_pages or 0
-            remaining_pages = total_pages - plan.total_pages_read
+            remaining_pages = total_pages - total_pages_read
 
             revised_target = (
                 ceil(remaining_pages / remaining_days) if remaining_days > 0 else None
@@ -148,10 +175,31 @@ def check_falling_behind(request):
             behind.append({
                 'book': plan.book.title,
                 'expected': expected_pages,
-                'actual': plan.total_pages_read,
-                'difference': expected_pages - plan.total_pages_read,
-                'revised_target': revised_target
+                'actual': total_pages_read,
+                'difference': expected_pages - total_pages_read,
+                'revised_target': revised_target,
             })
 
-    return render(request, 'reading/behind.html', {'behind': behind})
+    return render(request, 'reading/behind_alerts.html', {'behind': behind})
 
+
+
+def delete_goal(request, goal_id):
+    goal = get_object_or_404(ReadingGoal, id=goal_id, user=request.user)
+    goal.delete()
+    return redirect('reading_dashboard')  # or whatever your dashboard page is
+
+def about_shelfbuddy(request):
+    return render(request, 'reading/about_shelfbuddy.html')
+
+@login_required
+def edit_reading_plan(request, plan_id):
+    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    if request.method == 'POST':
+        form = ReadingPlanForm(request.POST, instance=plan)
+        if form.is_valid():
+            form.save()
+            return redirect('reading_dashboard')
+    else:
+        form = ReadingPlanForm(instance=plan)
+    return render(request, 'reading/edit_plan.html', {'form': form})

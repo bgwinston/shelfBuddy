@@ -1,5 +1,12 @@
 {% extends 'reading/base.html' %}
 {% block content %}
+
+{% if behind_alerts %}
+<div class="behind-alert-banner">
+  🚨 You're falling behind on some reading plans! 
+  <a href="{% url 'check_falling_behind' %}">View Behind Alerts</a>
+</div>
+{% endif %}
 <h1 class="dashboard-heading">📚 Your Bookshelf Dashboard</h1>
 
 <div class="dashboard-grid"> <!-- ✅ Add wrapper -->

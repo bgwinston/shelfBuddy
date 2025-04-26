@@ -1,6 +1,12 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
+{% if behind_alerts %}
+<div class="behind-alert-banner">
+  🚨 You're falling behind on some reading plans! 
+  <a href="{% url 'check_falling_behind' %}">View Behind Alerts</a>
+</div>
+{% endif %}
 <h2 style="display: flex; justify-content: space-between; align-items: center;">
   📚 My Reading Plans
   <span>
@@ -14,23 +20,25 @@
 {% if plans %}
   <div style="margin-top: 20px;">
     {% for plan in plans %}
-      <div style="border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-        <h3>{{ plan.book.title }}</h3>
-        <p><strong>Start Date:</strong> {{ plan.start_date }}</p>
-        <p><strong>Target End Date:</strong> {{ plan.target_end_date }}</p>
-        <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
-        <p><strong>Total Pages Read:</strong> {{ plan.total_pages_read }}</p>
-
+    <div class="plan-card">
+      <h3>{{ plan.book.title }}</h3>
+      <p><strong>Start:</strong> {{ plan.start_date|date:"M d, Y" }}</p>
+      <p><strong>End:</strong> {{ plan.target_end_date|date:"M d, Y" }}</p>
+      <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
+      <p><strong>Progress:</strong> {{ plan.percent_complete|floatformat:0 }}%</p>
+    
+      <div class="progress-bar-container">
         <div class="progress-bar">
-          <div class="progress-fill" style="width: {{ plan.percent_complete }}%;">
-            {{ plan.percent_complete }}%
+          <div class="progress-fill" style="width: {{ plan.percent_complete|floatformat:0 }}%;">
+            {{ plan.percent_complete|floatformat:0 }}%
           </div>
         </div>
-
-        <a href="{% url 'reading_plan_detail' plan.id %}" class="button">View Details</a>
-        <a href="{% url 'log_progress' plan.id %}" class="button">Log Progress</a>
       </div>
-    {% endfor %}
+    
+      <a href="{% url 'reading_plan_detail' plan.id %}" class="button">View Details</a>
+      <a href="{% url 'edit_reading_plan' plan.id %}" class="button button-turquoise" style="margin-top: 10px;">✏️ Edit Plan</a> 
+    </div>
+  {% endfor %}
   </div>
 {% else %}
   <p>You don't have any active reading plans yet.</p>
@@ -51,6 +59,11 @@
         {% else %}
           🔄 <em>In Progress</em>
         {% endif %}
+
+        <!-- ✅ Delete button -->
+        <a href="{% url 'delete_goal' goal.id %}" class="button" style="font-size: 0.7em; background-color: #D32F2F; margin-left: 10px;">
+          🗑️ Delete
+        </a>
       </li>
     {% endfor %}
   </ul>

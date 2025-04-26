@@ -1,9 +1,12 @@
 {% extends 'reading/base.html' %}
 
+{% block body_class %}falling-behind-page-background{% endblock %}
+
 {% block content %}
+<div class="falling-behind-page">
   <h2>📉 Falling Behind on Your Reading Plans</h2>
 
-  <ul>
+  <ul class="falling-behind-list">
     {% for item in behind %}
       <li>
         <strong>{{ item.book }}</strong>: 
@@ -16,5 +19,6 @@
     {% endfor %}
   </ul>
 
-  <a href="{% url 'reading_dashboard' %}">← Back to Dashboard</a>
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+</div>
 {% endblock %}

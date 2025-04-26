@@ -14,7 +14,12 @@ class ReadingProgressForm(forms.ModelForm):
     class Meta:
         model = ReadingProgress
         fields = ['pages_read']
+
 class ReadingGoalForm(forms.ModelForm):
     class Meta:
         model = ReadingGoal
-        fields = ['goal_type', 'target_amount', 'time_period']
+        fields = ['name', 'goal_type', 'target_amount', 'time_period', 'start_date', 'end_date']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }

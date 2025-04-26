@@ -7,8 +7,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.utils.timezone import now
-from reading.models import Book  
-
+from reading.models import Book, ReadingPlan, ReadingProgress, ReadingGoal
+from datetime import date, timedelta
 
 def register_view(request):
     if request.method == 'POST':
@@ -145,18 +145,26 @@ def dashboard(request):
 
 
 def dashboard_view(request):
-    user = request.user
+    currently_reading = Book.objects.filter(user=request.user, status='in_progress')[:3]
+    recent_books = Book.objects.filter(user=request.user).order_by('-date_added')[:3]
+    overdue_books = Book.objects.filter(user=request.user, is_loaned=True, due_date__lt=date.today())[:3]
+    wishlist_books = Book.objects.filter(user=request.user, is_wishlist=True)[:3]
 
-    currently_reading = Book.objects.filter(user=user, status='in_progress')[:4]
-    recent_books = Book.objects.filter(user=user).order_by('-date_added')[:4]
-    overdue_books = Book.objects.filter(user=user, is_loaned=True, due_date__lt=now())[:4]
-    wishlist_books = Book.objects.filter(user=user, is_wishlist=True)[:4]
+    # Check behind alerts
+    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+    behind_alerts = []
+    today = date.today()
+    for plan in plans:
+        expected = (today - plan.start_date).days * plan.daily_target_pages
+        actual = plan.total_pages_read
+        if actual < expected:
+            behind_alerts.append(plan)
 
-    context = {
+    return render(request, 'users/dashboard.html', {
         'currently_reading': currently_reading,
         'recent_books': recent_books,
         'overdue_books': overdue_books,
         'wishlist_books': wishlist_books,
-    }
+        'behind_alerts': behind_alerts,
+    })
 
-    return render(request, 'users/dashboard.html', context)

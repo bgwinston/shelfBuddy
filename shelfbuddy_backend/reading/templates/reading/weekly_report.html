@@ -13,6 +13,7 @@
 <body>
   <h2>📘 Weekly Reading Report ({{ week_start }} to {{ week_end }})</h2>
   <button class="print-btn" onclick="window.print()">🖨️ Print Report</button>
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
 
   {% for item in report_data %}
     <div class="report-box">

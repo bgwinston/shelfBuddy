@@ -2,13 +2,17 @@
 
 {% block title %}Create Reading Plan{% endblock %}
 
+{% block body_class %}create-plan-page-background{% endblock %}
+
 {% block content %}
+<div class="create-plan-page">
   <h2>🗓️ Create Reading Plan</h2>
 
-  <form method="post">
+  <form method="post" class="center-plan-form">
     {% csrf_token %}
     {{ form.as_p }}
-
     <button type="submit" class="button">➕ Create Plan</button>
   </form>
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+</div>
 {% endblock %}

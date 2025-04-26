@@ -1,0 +1,36 @@
+{% extends 'reading/base.html' %}
+{% load static %}
+{% block body_class %}about-shelfbuddy-background{% endblock %}
+
+{% block content %}
+<div class="about-shelfbuddy-container">
+
+  <!-- ✨ Logo at top -->
+  <div class="about-logo">
+    <img src="{% static 'images/Shelfbuddy.png' %}" alt="ShelfBuddy Logo">
+  </div>
+
+  <h1>📚 About ShelfBuddy</h1>
+
+  <p>ShelfBuddy is your personal library companion! Whether you're managing your growing book collection, tracking what you're reading, setting goals, or loaning books to friends — ShelfBuddy makes it easy and fun.</p>
+
+  <h2>✨ Features:</h2>
+  <ul class="about-features-list">
+    <li>📘 Catalog and manage your entire personal library</li>
+    <li>📈 Set and track personalized reading goals</li>
+    <li>📝 Maintain a wishlist of books to read next</li>
+    <li>📕 Track loaned and borrowed books with due dates</li>
+    <li>🔎 Search for new books using integrated tools</li>
+    <li>🎯 Get progress reports and suggestions if falling behind</li>
+  </ul>
+
+  <h2>💡 Why ShelfBuddy?</h2>
+  <p>Reading is more than just flipping pages — it's about setting goals, celebrating achievements, and enjoying every story. ShelfBuddy helps you stay organized and inspired, turning every book into a milestone on your personal journey. 📖✨</p>
+
+  <div class="about-buttons">
+    <a href="{% url 'dashboard' %}" class="button">🏠 Back to Dashboard</a>
+    <a href="{% url 'register' %}" class="button">👤 Create an Account</a>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,48 +1,9 @@
 {% extends 'reading/base.html' %}
 
+{% block body_class %}book-detail-background{% endblock %}
+
 {% block content %}
-  <title>{{ book.title }} - Book Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      background-color: #f9f9f9;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-    }
-    .field {
-      margin-top: 15px;
-    }
-    .field label {
-      font-weight: bold;
-    }
-    .field-value {
-      margin-top: 5px;
-      padding: 8px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .button:hover {
-      background-color: #45a049;
-    }
-  </style>
-</head>
-<body>
+<div class="book-details-container">
   <h2>{{ book.title }}</h2>
 
   <div class="field">
@@ -95,7 +56,9 @@
   </div>
   {% endif %}
 
-  <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
-  <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
-</body>
+  <div class="book-buttons">
+    <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
+    <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
+  </div>
+</div>
 {% endblock %}

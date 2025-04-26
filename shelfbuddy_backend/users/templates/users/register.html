@@ -9,6 +9,11 @@
 <body class="login-background">
 
   <div class="login-container">
+    <div class="slogan-text">
+      <div class="shelfbuddy-name">ShelfBuddy</div>
+      <div class="shelfbuddy-slogan">📚 Read More, Worry Less</div>
+    </div>
+
     <h2>Register</h2>
 
     {% if success %}
@@ -55,6 +60,11 @@
     <p class="forgot-password" style="margin-top: 12px;">
       Already have an account?
       <a href="{% url 'login' %}">Log in here</a>
+    </p>
+
+    <p class="forgot-password" style="margin-top: 12px;">
+      Curious about ShelfBuddy?
+      <a href="{% url 'about_shelfbuddy' %}">Learn more here</a>
     </p>
 
     {% if error %}

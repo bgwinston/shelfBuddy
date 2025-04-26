@@ -1,9 +1,15 @@
 {% extends 'reading/base.html' %}
 
+{% block body_class %}log-progress-page-background{% endblock %}
+
 {% block content %}
-<h2>Log Reading Progress for {{ plan.book.title }}</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log</button>
+<div class="log-progress-page">
+  <h2>📚 Log Reading Progress for {{ plan.book.title }}</h2>
+
+  <form method="post" class="center-log-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Log</button>
+  </form>
+</div>
 {% endblock %}

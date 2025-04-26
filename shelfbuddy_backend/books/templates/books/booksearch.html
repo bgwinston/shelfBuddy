@@ -1,63 +1,55 @@
 {% extends 'reading/base.html' %}
 
+{% block body_class %}add-book-page-background{% endblock %}
+
 {% block content %}
-<h2>Add a Book</h2>
+<div class="add-book-container">
+  <h2>Add a Book</h2>
 
-<form method="get" action="{% url 'booksearch' %}">
-    <input type="text" name="q" value="{{ search_query }}" placeholder="Search title or author" required>
-    <select name="search_type">
-        <option value="all">All</option>
-        <option value="title">Title only</option>
-        <option value="author">Author only</option>
-    </select>
-    <button type="submit">Search</button>
-</form>
+  <form method="get" action="{% url 'booksearch' %}" class="center-form">
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Search title or author" required>
+      <select name="search_type">
+          <option value="all">All</option>
+          <option value="title">Title only</option>
+          <option value="author">Author only</option>
+      </select>
+      <button type="submit">Search</button>
+  </form>
 
-{% if results %}
-    <h3>Search Results</h3>
-    {% for book in results %}
-    <!-- <a href="{% url 'bookview' book.google_book_id %}" style="display: inline-block; padding: 10px; background: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
-        View Book Details
-    </a> -->
-              {% csrf_token %}
-            <div style="border:1px solid #ccc; margin-bottom: 10px; padding: 10px;">
-                <img src="{{ book.thumbnail }}" alt="Cover" style="height: 100px;">
-                <strong>{{ book.title }}</strong><br>
-                <em>{{ book.authors }}</em><br>
-                <p>{{ book.description|truncatewords:30 }}</p>
-                
-                <input type="hidden" name="title" value="{{ book.title }}">
-                <input type="hidden" name="authors" value="{{ book.authors }}">
-                <input type="hidden" name="genre" value="{{ book.genre }}">
-                <input type="hidden" name="description" value="{{ book.description }}">
-                <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
-                <input type="hidden" name="source" value="google">
-                
-                <a href="{% url 'bookview' book.google_book_id %}">
-                    View Book Details   
-                </a>         
-                </div>
-        </form>
-    {% endfor %}
-{% endif %}
+  {% if results %}
+      <h3>Search Results</h3>
+      {% for book in results %}
+          {% csrf_token %}
+          <div class="search-result-card">
+              <img src="{{ book.thumbnail }}" alt="Cover" class="thumbnail">
+              <strong>{{ book.title }}</strong><br>
+              <em>{{ book.authors }}</em><br>
+              <p>{{ book.description|truncatewords:30 }}</p>
 
-<hr>
+              <a href="{% url 'bookview' book.google_book_id %}" class="view-details-link">
+                  View Book Details
+              </a>
+          </div>
+      {% endfor %}
+  {% endif %}
 
-<h3>Or Add a Book Manually</h3>
-<form method="post" action="{% url 'save-book' %}">
-    {% csrf_token %}
-    <label>Title:</label><br>
-    <input type="text" name="title" required><br>
-    
-    <label>Author(s):</label><br>
-    <input type="text" name="authors"><br>
-    
-    <label>Description:</label><br>
-    <textarea name="description"></textarea><br>
-    
-    <input type="hidden" name="source" value="manual">
-    
-    <button type="submit">Add Book</button>
-</form>
+  <hr>
 
+  <h3>Or Add a Book Manually</h3>
+  <form method="post" action="{% url 'save-book' %}" class="center-form">
+      {% csrf_token %}
+      <label>Title:</label><br>
+      <input type="text" name="title" required><br>
+
+      <label>Author(s):</label><br>
+      <input type="text" name="authors"><br>
+
+      <label>Description:</label><br>
+      <textarea name="description"></textarea><br>
+
+      <input type="hidden" name="source" value="manual">
+
+      <button type="submit">Add Book</button>
+  </form>
+</div>
 {% endblock %}
