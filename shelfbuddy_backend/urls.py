@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shelfbuddy_backend.users.urls')),
     path('', include('shelfbuddy_backend.books.urls')),
     path('', include('shelfbuddy_backend.reading.urls')),
+    path('', RedirectView.as_view(pattern_name='login', permanent=False)),  # ← NEW
 ]
