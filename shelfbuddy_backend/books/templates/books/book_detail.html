@@ -1,23 +1,70 @@
 {% extends 'reading/base.html' %}
 
+{% block body_class %}book-detail-background{% endblock %}
+
 {% block content %}
+<div class="book-details-container">
+
+  {% if book.cover_image %}
+    <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="book-detail-image">
+  {% endif %}
+
   <h2>{{ book.title }}</h2>
 
-  <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-    {% if book.cover_image %}
-      <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="150">
-    {% endif %}
+  <div class="field">
+    <label>Author:</label>
+    <div class="field-value">{{ book.author }}</div>
+  </div>
 
-    <div>
-      <p><strong>Author:</strong> {{ book.author }}</p>
-      <p><strong>Genre:</strong> {{ book.genre|default:"N/A" }}</p>
-      <p><strong>Status:</strong> {{ book.status|default:"-" }}</p>
-      <p><strong>From Public Library:</strong> {{ book.is_public_library|yesno:"Yes,No" }}</p>
-      <p><strong>Loaned:</strong> {{ book.is_loaned|yesno:"Yes,No" }}</p>
-      <p><strong>Due Date:</strong> {{ book.due_date|date:"M d, Y" }}</p>
+  <div class="field">
+    <label>Description:</label>
+    <div class="field-value">{{ book.description }}</div>
+  </div>
 
+  <div class="field">
+    <label>Genre:</label>
+    <div class="field-value">{{ book.genre }}</div>
+  </div>
 
-      <a href="{% url 'edit_book' book.id %}" class="button">✏️ Edit Book</a>
+  <div class="field">
+    <label>Library Type:</label>
+    <div class="field-value">
+      {% if book.is_public_library %}Public Library{% else %}My Library{% endif %}
     </div>
   </div>
+
+  {% if book.is_public_library %}
+    <div class="field">
+      <label>Library Name:</label>
+      <div class="field-value">{{ book.library_name }}</div>
+    </div>
+  {% endif %}
+
+  <div class="field">
+    <label>Loaned:</label>
+    <div class="field-value">
+      {% if book.is_loaned %}Yes{% else %}No{% endif %}
+    </div>
+  </div>
+
+  {% if book.is_loaned %}
+    <div class="field">
+      <label>Loaned To:</label>
+      <div class="field-value">{{ book.loaned_to }}</div>
+    </div>
+  {% endif %}
+
+  {% if book.due_date %}
+    <div class="field">
+      <label>Due Date:</label>
+      <div class="field-value">{{ book.due_date|date:"M d, Y" }}</div>
+    </div>
+  {% endif %}
+
+  <div class="book-buttons">
+    <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
+    <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
+  </div>
+
+</div>
 {% endblock %}

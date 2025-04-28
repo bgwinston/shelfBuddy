@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from users.models import CustomUser
+from shelfbuddy_backend.users.models import CustomUser
 
 RATING_CHOICES = [
     (1, '★☆☆☆☆'),

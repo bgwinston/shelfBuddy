@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.utils.timezone import now
-from reading.models import Book, ReadingPlan, ReadingProgress, ReadingGoal
+from shelfbuddy_backend.reading.models import ReadingPlan, ReadingProgress, ReadingGoal
+from shelfbuddy_backend.books.models import Book
 from datetime import date, timedelta
 
 def register_view(request):

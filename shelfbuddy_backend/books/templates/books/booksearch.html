@@ -3,7 +3,8 @@
 {% block body_class %}add-book-page-background{% endblock %}
 
 {% block content %}
-<div class="add-book-container">
+<div class="add-book-container">  <!-- ⭐️ ADD THIS WRAPPER -->
+
   <h2>Add a Book</h2>
 
   <form method="get" action="{% url 'booksearch' %}" class="center-form">
@@ -19,7 +20,6 @@
   {% if results %}
       <h3>Search Results</h3>
       {% for book in results %}
-          {% csrf_token %}
           <div class="search-result-card">
               <img src="{{ book.thumbnail }}" alt="Cover" class="thumbnail">
               <strong>{{ book.title }}</strong><br>
@@ -51,5 +51,6 @@
 
       <button type="submit">Add Book</button>
   </form>
-</div>
+
+</div> <!-- ⭐️ CLOSE THE WRAPPER -->
 {% endblock %}

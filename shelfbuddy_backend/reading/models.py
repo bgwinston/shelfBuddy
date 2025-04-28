@@ -1,8 +1,6 @@
 # reading/models.py
 from django.db import models
-from users.models import CustomUser
-from books.models import Book
-
+from shelfbuddy_backend.users.models import CustomUser
 
 class ReadingGoal(models.Model):
     GOAL_TYPE_CHOICES = [
@@ -31,7 +29,7 @@ class ReadingGoal(models.Model):
     
 class ReadingPlan(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey('books.Book', on_delete=models.CASCADE)
     start_date = models.DateField()
     target_end_date = models.DateField()
     daily_target_pages = models.PositiveIntegerField()

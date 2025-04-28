@@ -15,7 +15,7 @@
 
 <!-- Book Table -->
 {% if books %}
-  <table style="border-collapse: collapse; width: 100%;">
+  <table class="library-table">
     <thead>
       <tr>
         <th>Cover</th>
@@ -41,7 +41,17 @@
         </td>
         <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
-        <td>{{ book.genre|default:"N/A" }}</td>
+        <td>
+          {% if book.genre %}
+            {% if book.genre|length > 50 %}
+              {{ book.genre|slice:":50" }}...
+            {% else %}
+              {{ book.genre }}
+            {% endif %}
+          {% else %}
+            N/A
+          {% endif %}
+        </td>
         <td>{{ book.status|default:"-" }}</td>
         <td>{% if book.is_public_library %}<span style="color:green;">✔</span>{% endif %}</td>
         <td>{% if book.is_loaned %}<span style="color:red;">✔</span>{% endif %}</td>
@@ -64,7 +74,7 @@
     </tbody>
   </table>
 {% else %}
-  <p>You haven't added any books yet.</p>
+  <p>No books found.</p>
 {% endif %}
 
 {% endblock %}

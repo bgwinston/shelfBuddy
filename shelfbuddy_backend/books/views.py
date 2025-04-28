@@ -1,8 +1,8 @@
 import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
-from users.models import CustomUser  
-import datetime
+from shelfbuddy_backend.users.models import CustomUser
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 

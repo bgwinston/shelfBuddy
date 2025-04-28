@@ -1,22 +1,24 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
+<div class="book-view-container">  <!-- ⭐️ ADD THIS WRAPPER -->
+
   <h2>{{ book.title }}</h2>
   <p><strong>Author(s):</strong> {{ book.authors }}</p>
 
   {% if book.thumbnail %}
-    <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover" style="height: 150px;">
+    <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover" class="book-thumbnail">
   {% endif %}
 
-  <p>{{ book.description }}</p>
+  <p class="book-description">{{ book.description }}</p>
 
   {% if book.rating %}
     <p><strong>Rating:</strong>
       {% for i in "12345"|make_list %}
         {% if i|add:"0" <= book.rating|stringformat:"d" %}
-          <span style="color:gold;">&#9733;</span>
+          <span class="star-filled">&#9733;</span>
         {% else %}
-          <span style="color:#ccc;">&#9733;</span>
+          <span class="star-empty">&#9733;</span>
         {% endif %}
       {% endfor %}
     </p>
@@ -56,4 +58,6 @@
 
   <br>
   <a href="{% url 'booksearch' %}" class="back-link">← Back to Search</a>
+
+</div> <!-- ⭐️ CLOSE THE WRAPPER -->
 {% endblock %}

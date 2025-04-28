@@ -18,9 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
-    path('', include('books.urls')),
-    path('', include('reading.urls')),
-
-
+    path('', include('shelfbuddy_backend.users.urls')),
+    path('', include('shelfbuddy_backend.books.urls')),
+    path('', include('shelfbuddy_backend.reading.urls')),
 ]
