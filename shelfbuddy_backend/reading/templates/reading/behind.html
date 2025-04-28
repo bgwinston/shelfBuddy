@@ -1,0 +1,25 @@
+{% extends 'reading/base.html' %}
+
+{% block body_class %}falling-behind-page-background{% endblock %}
+
+{% block content %}
+<div class="falling-behind-container">   <!-- ⭐️ FIXED to match CSS -->
+
+  <h2>📉 Falling Behind on Your Reading Plans</h2>
+
+  <ul class="falling-behind-list">
+    {% for item in behind %}
+      <li>
+        <strong>{{ item.book }}</strong>: 
+        You're {{ item.difference }} pages behind 
+        ({{ item.actual }} of {{ item.expected }} pages read).<br>
+        📈 <strong>Suggested New Daily Goal:</strong> {{ item.revised_target }} pages/day
+      </li>
+    {% empty %}
+      <li>🎉 You're on track with all your reading plans!</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+</div>
+{% endblock %}

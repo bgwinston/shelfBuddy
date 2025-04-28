@@ -1,0 +1,38 @@
+{% extends 'reading/base.html' %}
+
+{% block body_class %}loaned-books-background{% endblock %}
+
+{% block content %}
+<div class="loaned-books-container">
+  <h2>📕 Loaned Books Tracker</h2>
+
+  {% if loaned_books %}
+    <table class="loaned-books-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Loaned To</th>
+          <th>Phone Number</th>
+          <th>Due Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in loaned_books %}
+          <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.loaned_to|default:"—" }}</td>
+            <td>{{ book.loaned_to_phone|default:"—" }}</td>
+            <td>{{ book.due_date|date:"M d, Y" }}</td>
+            <td>
+              <a href="{% url 'edit_book' book.id %}" class="edit-link">Edit</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="empty-message">You have not loaned any books yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

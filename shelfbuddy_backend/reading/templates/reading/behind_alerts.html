@@ -1,0 +1,32 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+<div class="behind-page-container">
+
+  <h2 class="behind-header">🚨 Behind on Reading Plans</h2>
+
+  <ul class="behind-list">
+    {% for item in behind %}
+      <li>
+        <strong>{{ item.book }}</strong>: You are {{ item.difference }} pages behind ({{ item.actual }} of {{ item.expected }} pages read).<br>
+
+        {% if item.difference <= 10 %}
+          Suggestion: Add just a few extra pages per day — you’ll catch up in no time! 💪
+        {% elif item.difference <= 30 %}
+          Suggestion: Try reading 5–10 more pages daily this week to close the gap. 📖
+        {% else %}
+          Suggestion: Consider extending your end date or setting shorter daily goals temporarily. 🛠️
+        {% endif %}
+
+        {% if item.revised_target %}
+          <br><em>📈 New suggested daily goal:</em> {{ item.revised_target }} pages/day
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>🎉 You're on track with all your reading plans!</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | ShelfBuddy</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="login-background">
+
+  <div class="login-container">
+    <div class="slogan-text">
+      <div class="shelfbuddy-name">ShelfBuddy</div>
+      <div class="shelfbuddy-slogan">📚 Read More, Worry Less</div>
+    </div>
+
+    <h2>Register</h2>
+
+    {% if success %}
+      <p class="success-msg">{{ success }}</p>
+    {% endif %}
+
+    <form method="POST" onsubmit="return validatePasswords()">
+      {% csrf_token %}
+
+      <label>First Name:</label>
+      <input type="text" name="first_name" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" required>
+
+      <label>Username:</label>
+      <input type="text" name="username" required>
+
+      <label>Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <label>Confirm Password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required>
+
+      <label>Favorite Genre:</label>
+      <select name="favorite_genre" id="genre-select" onchange="toggleOtherGenreInput()">
+        <option value="">--Select Genre--</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Mystery">Mystery</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Romance">Romance</option>
+        <option value="Nonfiction">Nonfiction</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <div id="other-genre-div" style="display:none;">
+        <label>Other Genre:</label>
+        <input type="text" name="other_genre">
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p class="forgot-password" style="margin-top: 12px;">
+      Already have an account?
+      <a href="{% url 'login' %}">Log in here</a>
+    </p>
+
+    <p class="forgot-password" style="margin-top: 12px;">
+      Curious about ShelfBuddy?
+      <a href="{% url 'about_shelfbuddy' %}">Learn more here</a>
+    </p>
+
+    {% if error %}
+      <p class="error-msg">{{ error }}</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function toggleOtherGenreInput() {
+      const genreSelect = document.getElementById("genre-select");
+      const otherDiv = document.getElementById("other-genre-div");
+      otherDiv.style.display = (genreSelect.value === "Other") ? "block" : "none";
+    }
+
+    function validatePasswords() {
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm_password").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return false;  // Prevent form submission
+      }
+      return true;
+    }
+  </script>
+
+</body>
+</html>

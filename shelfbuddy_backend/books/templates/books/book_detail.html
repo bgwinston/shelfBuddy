@@ -1,0 +1,70 @@
+{% extends 'reading/base.html' %}
+
+{% block body_class %}book-detail-background{% endblock %}
+
+{% block content %}
+<div class="book-details-container">
+
+  {% if book.cover_image %}
+    <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="book-detail-image">
+  {% endif %}
+
+  <h2>{{ book.title }}</h2>
+
+  <div class="field">
+    <label>Author:</label>
+    <div class="field-value">{{ book.author }}</div>
+  </div>
+
+  <div class="field">
+    <label>Description:</label>
+    <div class="field-value">{{ book.description }}</div>
+  </div>
+
+  <div class="field">
+    <label>Genre:</label>
+    <div class="field-value">{{ book.genre }}</div>
+  </div>
+
+  <div class="field">
+    <label>Library Type:</label>
+    <div class="field-value">
+      {% if book.is_public_library %}Public Library{% else %}My Library{% endif %}
+    </div>
+  </div>
+
+  {% if book.is_public_library %}
+    <div class="field">
+      <label>Library Name:</label>
+      <div class="field-value">{{ book.library_name }}</div>
+    </div>
+  {% endif %}
+
+  <div class="field">
+    <label>Loaned:</label>
+    <div class="field-value">
+      {% if book.is_loaned %}Yes{% else %}No{% endif %}
+    </div>
+  </div>
+
+  {% if book.is_loaned %}
+    <div class="field">
+      <label>Loaned To:</label>
+      <div class="field-value">{{ book.loaned_to }}</div>
+    </div>
+  {% endif %}
+
+  {% if book.due_date %}
+    <div class="field">
+      <label>Due Date:</label>
+      <div class="field-value">{{ book.due_date|date:"M d, Y" }}</div>
+    </div>
+  {% endif %}
+
+  <div class="book-buttons">
+    <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
+    <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
+  </div>
+
+</div>
+{% endblock %}

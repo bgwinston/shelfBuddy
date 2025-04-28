@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📚 Reading Tracker</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    <!-- Top Banner -->
+    <header class="top-header">
+        <div class="top-left">
+            <img src="{% static 'images/ShelfBuddy.png' %}" alt="ShelfBuddy Logo">
+        </div>
+        <div class="top-center">
+            <h1 class="page-title">
+                Welcome to ShelfBuddy{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}!
+            </h1>
+        </div>
+        <div class="top-right">
+            <a href="{% url 'profile' %}" class="profile-link">👤 Profile</a>
+            <a href="{% url 'about_shelfbuddy' %}" class="profile-link">ℹ️ About</a>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">🚪 Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Sticky Nav Bar -->
+    <nav class="sticky-navbar">
+        <a href="{% url 'dashboard' %}">🏠 Home</a>
+        <a href="{% url 'booksearch' %}">➕ Search Books</a>
+        <a href="{% url 'reading_dashboard' %}">📈 Progress</a>
+        <a href="{% url 'mylibrary' %}">📘 Library</a>
+        <a href="{% url 'loaned_books' %}">📕 Loans</a>
+        <a href="{% url 'wishlist' %}">📚 Wishlist</a>
+    </nav>
+    <div class="nav-accent"></div>
+    <hr>
+
+    {% block content %}{% endblock %}
+
+    <!-- ✨ Footer here -->
+    <footer class="site-footer">
+      📚 ShelfBuddy — Read More, Worry Less
+    </footer>
+
+</body>
+</html>

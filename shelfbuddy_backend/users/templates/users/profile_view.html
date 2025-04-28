@@ -1,0 +1,14 @@
+{% extends 'reading/base.html' %}
+{% block body_class %}profile-page{% endblock %}
+{% block content %}
+<div class="profile-container">
+  <h2>👤 Your Profile</h2>
+
+  <div class="info"><label>First Name:</label> {{ user.first_name }}</div>
+  <div class="info"><label>Username:</label> {{ user.username }}</div>
+  <div class="info"><label>Email:</label> {{ user.email }}</div>
+  <div class="info"><label>Favorite Genre:</label> {{ user.favorite_genre }}</div>
+
+  <a href="{% url 'edit_profile' %}" class="button">✏️ Edit Profile</a>
+</div>
+{% endblock %}

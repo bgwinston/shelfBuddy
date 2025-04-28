@@ -1,0 +1,45 @@
+{% extends 'reading/base.html' %}
+
+{% block body_class %}book-detail-background{% endblock %}
+
+{% block content %}
+<div class="book-details-container">
+
+  {% if book.cover_image %}
+    <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="book-detail-image">
+  {% endif %}
+
+  <h2 class="book-title">{{ book.title }}</h2>
+
+  <div class="field-list">
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Description:</strong> {{ book.description }}</p>
+    <p><strong>Genre:</strong> {{ book.genre|default:"N/A" }}</p>
+    <p><strong>Library Type:</strong> 
+      {% if book.is_public_library %}Public Library{% else %}My Library{% endif %}
+    </p>
+
+    {% if book.is_public_library %}
+      <p><strong>Library Name:</strong> {{ book.library_name }}</p>
+    {% endif %}
+
+    <p><strong>Loaned:</strong> 
+      {% if book.is_loaned %}Yes{% else %}No{% endif %}
+    </p>
+
+    {% if book.is_loaned %}
+      <p><strong>Loaned To:</strong> {{ book.loaned_to }}</p>
+    {% endif %}
+
+    {% if book.due_date %}
+      <p><strong>Due Date:</strong> {{ book.due_date|date:"M d, Y" }}</p>
+    {% endif %}
+  </div>
+
+  <div class="book-buttons">
+    <a class="button" href="{% url 'edit_book' book.id %}">✏️ Edit Book</a>
+    <a class="button" href="{% url 'mylibrary' %}">← Back to Library</a>
+  </div>
+
+</div>
+{% endblock %}

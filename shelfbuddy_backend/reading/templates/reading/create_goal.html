@@ -1,0 +1,53 @@
+{% extends 'reading/base.html' %}
+{% block body_class %}create-goal-page-background{% endblock %}
+
+{% block content %}
+<div class="create-goal-page">
+  <h2>🎯 Create a Reading Goal</h2>
+
+  <label for="suggested-goals">Choose a Suggested Goal:</label>
+  <select id="suggested-goals" onchange="autoFillGoalFields(this.value)">
+    <option value="">-- Choose a Goal --</option>
+    <option value="books:5:monthly">📘 Read 2 books this month</option>
+    <option value="books:12:yearly">📗 Read 12 books this year</option>
+    <option value="pages:100:weekly">📄 Read 100 pages per week</option>
+    <option value="pages:1000:monthly">📄 Read 1000 pages this month</option>
+  </select>
+
+  <form method="post" class="center-goal-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button button-red">🎯 Create Goal</button>
+  
+    <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+    </div>
+
+<script>
+function autoFillGoalFields(value) {
+  if (!value) return;
+  const [goalType, amount, period] = value.split(':');
+  document.getElementById('id_goal_type').value = goalType;
+  document.getElementById('id_target_amount').value = amount;
+  document.getElementById('id_time_period').value = period;
+
+  const today = new Date();
+  const startInput = document.getElementById('id_start_date');
+  const endInput = document.getElementById('id_end_date');
+
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  startInput.value = `${yyyy}-${mm}-${dd}`;
+
+  let endDate = new Date(today);
+  if (period === 'weekly') endDate.setDate(today.getDate() + 7);
+  else if (period === 'monthly') endDate.setMonth(today.getMonth() + 1);
+  else if (period === 'yearly') endDate.setFullYear(today.getFullYear() + 1);
+
+  const endYYYY = endDate.getFullYear();
+  const endMM = String(endDate.getMonth() + 1).padStart(2, '0');
+  const endDD = String(endDate.getDate()).padStart(2, '0');
+  endInput.value = `${endYYYY}-${endMM}-${endDD}`;
+}
+</script>
+{% endblock %}

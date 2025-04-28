@@ -1,0 +1,59 @@
+{% extends 'reading/base.html' %}
+{% block content %}
+
+{% if behind_alerts %}
+<div class="behind-alert-banner">
+  🚨 You're falling behind on some reading plans! 
+  <a href="{% url 'check_falling_behind' %}">View Behind Alerts</a>
+</div>
+{% endif %}
+<h1 class="dashboard-heading">📚 Your Bookshelf Dashboard</h1>
+
+<div class="dashboard-grid"> <!-- ✅ Add wrapper -->
+
+  <div class="dashboard-section">
+    <h2>📖 Currently Reading</h2>
+    <ul>
+      {% for book in currently_reading %}
+        <li>{{ book.title }} by {{ book.author }}</li>
+      {% empty %}
+        <li>No books in progress.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>🆕 Recently Added Books</h2>
+    <ul>
+      {% for book in recent_books %}
+        <li>{{ book.title }}</li>
+      {% empty %}
+        <li>No recent books.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>⏰ Overdue Books</h2>
+    <ul>
+      {% for book in overdue_books %}
+        <li>{{ book.title }} (Due: {{ book.due_date|date:"M d" }})</li>
+      {% empty %}
+        <li>No overdue books.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>🎯 Wishlist</h2>
+    <ul>
+      {% for book in wishlist_books %}
+        <li>{{ book.title }}</li>
+      {% empty %}
+        <li>No books in wishlist.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div> <!-- ✅ Close wrapper -->
+{% endblock %}

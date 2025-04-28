@@ -1,0 +1,80 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+
+<h2>📚 My Library Snapshot</h2>
+
+<!-- Search Form -->
+<form method="GET" action="{% url 'mylibrary' %}" class="library-search-form" style="margin-bottom: 20px;">
+  <input type="text" name="q" placeholder="Search your library..." value="{{ request.GET.q }}" required>
+  <button type="submit" class="button">🔍 Search</button>
+  {% if request.GET.q %}
+    <a href="{% url 'mylibrary' %}" class="button button-turquoise" style="margin-left: 10px;">🔄 Reset</a>
+  {% endif %}
+</form>
+
+<!-- Book Table -->
+{% if books %}
+  <table class="library-table">
+    <thead>
+      <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Status</th>
+        <th>Public</th>
+        <th>Loaned</th>
+        <th>Due Date</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>
+          {% if book.cover_image %}
+            <img src="{{ book.cover_image }}" alt="{{ book.title }}" height="75">
+          {% else %}
+            <em>No cover</em>
+          {% endif %}
+        </td>
+        <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
+        <td>{{ book.author }}</td>
+        <td>
+          {% if book.genre %}
+            {% if book.genre|length > 50 %}
+              {{ book.genre|slice:":50" }}...
+            {% else %}
+              {{ book.genre }}
+            {% endif %}
+          {% else %}
+            N/A
+          {% endif %}
+        </td>
+        <td>{{ book.status|default:"-" }}</td>
+        <td>{% if book.is_public_library %}<span style="color:green;">✔</span>{% endif %}</td>
+        <td>{% if book.is_loaned %}<span style="color:red;">✔</span>{% endif %}</td>
+        <td>{{ book.due_date|date:"M d, Y" }}</td>
+        <td>
+          {% if book.rating %}
+            {% for i in "12345"|make_list %}
+              {% if book.rating >= i|add:"0" %}
+                <span style="color:gold;">&#9733;</span>
+              {% else %}
+                <span style="color:#ccc;">&#9733;</span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <span style="color:#888;">Not yet rated</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No books found.</p>
+{% endif %}
+
+{% endblock %}

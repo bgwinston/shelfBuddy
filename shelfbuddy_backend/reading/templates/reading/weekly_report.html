@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weekly Reading Report</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .report-box { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
+    .on-track { color: green; }
+    .behind { color: red; }
+    .print-btn { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h2>📘 Weekly Reading Report ({{ week_start }} to {{ week_end }})</h2>
+  <button class="print-btn" onclick="window.print()">🖨️ Print Report</button>
+  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+
+  {% for item in report_data %}
+    <div class="report-box">
+      <h3>{{ item.book }}</h3>
+      <p>Pages Read This Week: {{ item.pages_this_week }}</p>
+      <p>Target Pages: {{ item.weekly_target }}</p>
+      <p>Status: 
+        {% if item.on_track %}
+          <span class="on-track">✅ On Track</span>
+        {% else %}
+          <span class="behind">⚠️ Behind Schedule</span>
+        {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+</body>
+</html>

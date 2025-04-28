@@ -1,0 +1,56 @@
+{% extends 'reading/base.html' %}
+
+{% block body_class %}add-book-page-background{% endblock %}
+
+{% block content %}
+<div class="add-book-container">  <!-- ⭐️ ADD THIS WRAPPER -->
+
+  <h2>Add a Book</h2>
+
+  <form method="get" action="{% url 'booksearch' %}" class="center-form">
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Search title or author" required>
+      <select name="search_type">
+          <option value="all">All</option>
+          <option value="title">Title only</option>
+          <option value="author">Author only</option>
+      </select>
+      <button type="submit">Search</button>
+  </form>
+
+  {% if results %}
+      <h3>Search Results</h3>
+      {% for book in results %}
+          <div class="search-result-card">
+              <img src="{{ book.thumbnail }}" alt="Cover" class="thumbnail">
+              <strong>{{ book.title }}</strong><br>
+              <em>{{ book.authors }}</em><br>
+              <p>{{ book.description|truncatewords:30 }}</p>
+
+              <a href="{% url 'bookview' book.google_book_id %}" class="view-details-link">
+                  View Book Details
+              </a>
+          </div>
+      {% endfor %}
+  {% endif %}
+
+  <hr>
+
+  <h3>Or Add a Book Manually</h3>
+  <form method="post" action="{% url 'save-book' %}" class="center-form">
+      {% csrf_token %}
+      <label>Title:</label><br>
+      <input type="text" name="title" required><br>
+
+      <label>Author(s):</label><br>
+      <input type="text" name="authors"><br>
+
+      <label>Description:</label><br>
+      <textarea name="description"></textarea><br>
+
+      <input type="hidden" name="source" value="manual">
+
+      <button type="submit">Add Book</button>
+  </form>
+
+</div> <!-- ⭐️ CLOSE THE WRAPPER -->
+{% endblock %}
