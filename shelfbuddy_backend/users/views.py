@@ -1,15 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from django.utils.timezone import now
+from users.models import CustomUser 
 from shelfbuddy_backend.reading.models import ReadingPlan, ReadingProgress, ReadingGoal
 from shelfbuddy_backend.books.models import Book
 from datetime import date, timedelta
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -22,17 +19,16 @@ def register_view(request):
         if favorite_genre == "Other":
             favorite_genre = request.POST.get('other_genre', '')
 
-        if User.objects.filter(username=username).exists():
+        if CustomUser.objects.filter(username=username).exists():
             return render(request, 'users/register.html', {'error': 'Username already exists'})
 
-        if User.objects.filter(email=email).exists():
+        if CustomUser.objects.filter(email=email).exists():
             return render(request, 'users/register.html', {'error': 'Email already in use'})
 
         if password != request.POST.get('confirm_password'):
             return render(request, 'users/register.html', {'error': 'Passwords do not match'})
 
-        # ✅ Use create_user so password is hashed properly
-        user = User.objects.create_user(
+        user = CustomUser.objects.create_user(
             username=username,
             password=password,
             first_name=first_name,
@@ -43,7 +39,6 @@ def register_view(request):
         return redirect('login')
 
     return render(request, 'users/register.html')
-
 
 
 def login_view(request):
@@ -62,12 +57,29 @@ def login_view(request):
     return render(request, 'users/login.html')
 
 
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def dashboard_view(request):
+    currently_reading = Book.objects.filter(user=request.user, status='in_progress')[:3]
+    recent_books = Book.objects.filter(user=request.user).order_by('-date_added')[:3]
+    overdue_books = Book.objects.filter(user=request.user, is_loaned=True, due_date__lt=date.today())[:3]
+    wishlist_books = Book.objects.filter(user=request.user, is_wishlist=True)[:3]
+
+    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+    behind_alerts = []
+    today = date.today()
+    for plan in plans:
+        expected = (today - plan.start_date).days * plan.daily_target_pages
+        actual = plan.total_pages_read
+        if actual < expected:
+            behind_alerts.append(plan)
+
     return render(request, 'users/dashboard.html', {
-        'first_name': request.user.first_name
+        'first_name': request.user.first_name,
+        'currently_reading': currently_reading,
+        'recent_books': recent_books,
+        'overdue_books': overdue_books,
+        'wishlist_books': wishlist_books,
+        'behind_alerts': behind_alerts,
     })
 
 
@@ -75,16 +87,17 @@ def dashboard_view(request):
 def add_book_view(request):
     return render(request, 'books/booksearch.html')
 
-from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
+
 @login_required
 def reading_dashboard(request):
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
     return render(request, 'reading/reading_dashboard.html', {'plans': plans})
+
 
 @login_required
 def profile_view(request):
@@ -139,33 +152,3 @@ def edit_profile_view(request):
         'password_form': password_form,
         'genres': GENRES
     })
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-
-
-def dashboard_view(request):
-    currently_reading = Book.objects.filter(user=request.user, status='in_progress')[:3]
-    recent_books = Book.objects.filter(user=request.user).order_by('-date_added')[:3]
-    overdue_books = Book.objects.filter(user=request.user, is_loaned=True, due_date__lt=date.today())[:3]
-    wishlist_books = Book.objects.filter(user=request.user, is_wishlist=True)[:3]
-
-    # Check behind alerts
-    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-    behind_alerts = []
-    today = date.today()
-    for plan in plans:
-        expected = (today - plan.start_date).days * plan.daily_target_pages
-        actual = plan.total_pages_read
-        if actual < expected:
-            behind_alerts.append(plan)
-
-    return render(request, 'users/dashboard.html', {
-        'currently_reading': currently_reading,
-        'recent_books': recent_books,
-        'overdue_books': overdue_books,
-        'wishlist_books': wishlist_books,
-        'behind_alerts': behind_alerts,
-    })
-
