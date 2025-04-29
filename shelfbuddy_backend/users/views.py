@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from users.models import CustomUser 
 from shelfbuddy_backend.reading.models import ReadingPlan, ReadingProgress, ReadingGoal
 from shelfbuddy_backend.books.models import Book
 from datetime import date, timedelta
-
+from shelfbuddy_backend.users.models import CustomUser
 
 def register_view(request):
     if request.method == 'POST':
