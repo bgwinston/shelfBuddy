@@ -1,14 +1,16 @@
 {% extends 'reading/base.html' %}
 {% block body_class %}profile-page{% endblock %}
 {% block content %}
-<div class="profile-container">
+<div class="profile-container" style="max-width: 500px; margin: 50px auto; text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+
   <h2>👤 Your Profile</h2>
 
-  <div class="info"><label>First Name:</label> {{ user.first_name }}</div>
-  <div class="info"><label>Username:</label> {{ user.username }}</div>
-  <div class="info"><label>Email:</label> {{ user.email }}</div>
-  <div class="info"><label>Favorite Genre:</label> {{ user.favorite_genre }}</div>
+  <div class="info" style="margin-bottom: 10px;"><label><strong>First Name:</strong></label> {{ user.first_name }}</div>
+  <div class="info" style="margin-bottom: 10px;"><label><strong>Username:</strong></label> {{ user.username }}</div>
+  <div class="info" style="margin-bottom: 10px;"><label><strong>Email:</strong></label> {{ user.email }}</div>
+  <div class="info" style="margin-bottom: 10px;"><label><strong>Favorite Genre:</strong></label> {{ user.favorite_genre }}</div>
 
-  <a href="{% url 'edit_profile' %}" class="button">✏️ Edit Profile</a>
+  <a href="{% url 'edit_profile' %}" class="button" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">✏️ Edit Profile</a>
+
 </div>
 {% endblock %}
