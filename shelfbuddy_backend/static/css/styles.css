@@ -356,7 +356,7 @@ body {
   gap: 10px;              
 }
 
-.profile-link, .logout-button {
+.profile-link {
   text-decoration: none;
   background: var(--color-primary);
   color: white;
@@ -364,15 +364,29 @@ body {
   border-radius: 6px;
   font-weight: bold;
   text-align: center;
-  display: block; /* 🔥 Ensure each is full width inside its flex item */
+  display: block; 
+}
+
+.logout-button {
+  text-decoration: none;
+  background: red;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  border: none;
+  cursor: pointer;
 }
 
 .logout-form {
-  margin: 0; /* 🔥 Remove default form margin */
+  margin: 0; 
+  background: red
 }
 
 .page-title {
-  font-size: 32px; /* 🔥 Bigger welcome text */
+  font-size: 32px; 
   font-weight: 700; /* 🔥 Make it a little bolder */
   color: var(--color-text);
   margin: 0;
