@@ -91,25 +91,25 @@ def weekly_report(request):
         'week_end': today
     })
 
-@login_required
-def check_falling_behind(request):
-    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-    behind = []
-    today = date.today()
+# @login_required
+# def check_falling_behind(request):
+#     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+#     behind = []
+#     today = date.today()
 
-    for plan in plans:
-        total_days = (today - plan.start_date).days + 1
-        expected_pages = plan.daily_target_pages * total_days
-        actual_pages = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-        if actual_pages < expected_pages:
-            behind.append({
-                'book': plan.book.title,
-                'expected': expected_pages,
-                'actual': actual_pages,
-                'difference': expected_pages - actual_pages
-            })
+#     for plan in plans:
+#         total_days = (today - plan.start_date).days + 1
+#         expected_pages = plan.daily_target_pages * total_days
+#         actual_pages = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
+#         if actual_pages < expected_pages:
+#             behind.append({
+#                 'book': plan.book.title,
+#                 'expected': expected_pages,
+#                 'actual': actual_pages,
+#                 'difference': expected_pages - actual_pages
+#             })
 
-    return render(request, 'reading/behind_alerts.html', {'behind': behind})
+#     return render(request, 'reading/behind_alerts.html', {'behind': behind})
 
 
 @login_required
@@ -232,7 +232,7 @@ def reading_plan_detail(request, plan_id):
     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
 
     total_read = sum(p.pages_read for p in progress)
-    total_read = plan.total_pages_read
+    plan.total_pages_read = total_read
 
     # Avoid division by zero and use .total_pages from the related book
     if plan.book and plan.book.total_pages:
