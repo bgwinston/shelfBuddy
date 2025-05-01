@@ -25,6 +25,14 @@
 
         {% if item.revised_target %}
           <br><br><em>📈 New suggested daily goal:</em> <strong>{{ item.revised_target }}</strong> pages/day
+          <div class="suggestion-buttons">
+            <a href="{% url 'apply_suggested_target' item.plan_id %}?revised_target={{ item.revised_target }}"
+               class="apply-button">✅ Apply Suggested Goal</a>
+          
+            <a href="{% url 'reading_plan_detail' item.plan_id %}" class="decline-button">
+               🚫 Do Not Apply / Return to Plan
+            </a>
+          </div>
         {% endif %}
       </li>
     {% empty %}

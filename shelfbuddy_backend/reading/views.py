@@ -170,12 +170,8 @@ def check_falling_behind(request):
     behind = []
 
     for plan in plans:
-        # Dynamically calculate total pages read
-        total_pages_read = sum(progress.pages_read for progress in ReadingProgress.objects.filter(plan=plan))
-        
-        # Calculate how many days have passed
-        days_passed = (today - plan.start_date).days + 1  # +1 to include today
-
+        total_pages_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
+        days_passed = (today - plan.start_date).days + 1
         expected_pages = plan.daily_target_pages * days_passed
 
         if total_pages_read < expected_pages:
@@ -183,9 +179,11 @@ def check_falling_behind(request):
             total_pages = plan.book.total_pages or 0
             remaining_pages = total_pages - total_pages_read
 
-            revised_target = (
-                ceil(remaining_pages / remaining_days) if remaining_days > 0 else None
-            )
+            if remaining_days > 0:
+                # 📈 Smart revised target
+                revised_target = ceil((expected_pages - total_pages_read + (plan.daily_target_pages * remaining_days)) / remaining_days)
+            else:
+                revised_target = None
 
             behind.append({
                 'book': plan.book.title,
@@ -202,7 +200,7 @@ def check_falling_behind(request):
 def delete_goal(request, goal_id):
     goal = get_object_or_404(ReadingGoal, id=goal_id, user=request.user)
     goal.delete()
-    return redirect('reading_dashboard')  # or whatever your dashboard page is
+    return redirect('reading_dashboard') 
 
 def about_shelfbuddy(request):
     return render(request, 'reading/about_shelfbuddy.html')
@@ -234,7 +232,7 @@ def reading_plan_detail(request, plan_id):
     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
 
     total_read = sum(p.pages_read for p in progress)
-    plan.total_pages_read = total_read
+    total_read = plan.total_pages_read
 
     # Avoid division by zero and use .total_pages from the related book
     if plan.book and plan.book.total_pages:
