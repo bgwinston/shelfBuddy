@@ -1,6 +1,7 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
+<div class="container">
   <h2>📝 My Wishlist</h2>
 
   {% if books %}
@@ -44,8 +45,9 @@
   {% endif %}
 
   <div style="margin-top: 20px;">
-    <a href="{% url 'booksearch' %}" class="button" style="background-color: #4CAF50; color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+    <a href="{% url 'booksearch' %}" class="button">
       ➕ Add Book to Wishlist
     </a>
   </div>
+</div>
 {% endblock %}
