@@ -16,9 +16,10 @@
   <!-- Progress Bar -->
   <div class="progress-bar-container">
     <div class="progress-bar">
-      <div class="progress-fill" style="width: {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%;">
-        {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%
-      </div>
+      <div class="progress-fill" style="width: {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%;"></div>
+    </div>
+    <div class="progress-label">
+      {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%
     </div>
   </div>
 
