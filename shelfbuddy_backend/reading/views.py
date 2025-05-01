@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ReadingPlan, ReadingProgress, ReadingGoal, ReadingPlan
 from .forms import ReadingPlanForm, ReadingProgressForm
@@ -23,31 +24,31 @@ def create_reading_plan(request):
         form = ReadingPlanForm()
     return render(request, 'reading/create_plan.html', {'form': form})
 
-# @login_required
-# def reading_plan_detail(request, plan_id):
-#     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
-#     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
-#     total_read = sum(p.pages_read for p in progress)
+@login_required
+def reading_plan_detail(request, plan_id):
+    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
+    total_read = sum(p.pages_read for p in progress)
 
-#     # ✅ Calculate the percent complete
-#     total_days = (plan.target_end_date - plan.start_date).days + 1
-#     total_goal_pages = plan.daily_target_pages * total_days
+    # ✅ Calculate the percent complete
+    total_days = (plan.target_end_date - plan.start_date).days + 1
+    total_goal_pages = plan.daily_target_pages * total_days
 
-#     if total_goal_pages > 0:
-#         percent_complete = (total_read / total_goal_pages) * 100
-#     else:
-#         percent_complete = 0
+    if total_goal_pages > 0:
+        percent_complete = (total_read / total_goal_pages) * 100
+    else:
+        percent_complete = 0
 
-#     if percent_complete > 100:
-#         percent_complete = 100  # ✅ cap it at 100%
+    if percent_complete > 100:
+        percent_complete = 100  
 
-#     plan.percent_complete = round(percent_complete, 1)  # round to 1 decimal if you want
+    plan.percent_complete = round(percent_complete, 1) 
 
-#     return render(request, 'reading/plan_detail.html', {
-#         'plan': plan,
-#         'progress': progress,
-#         'total_read': total_read,
-#     })
+    return render(request, 'reading/plan_detail.html', {
+        'plan': plan,
+        'progress': progress,
+        'total_read': total_read,
+    })
 @login_required
 def log_progress(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
@@ -91,25 +92,25 @@ def weekly_report(request):
         'week_end': today
     })
 
-# @login_required
-# def check_falling_behind(request):
-#     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-#     behind = []
-#     today = date.today()
+@login_required
+def check_falling_behind(request):
+    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
+    behind = []
+    today = date.today()
 
-#     for plan in plans:
-#         total_days = (today - plan.start_date).days + 1
-#         expected_pages = plan.daily_target_pages * total_days
-#         actual_pages = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-#         if actual_pages < expected_pages:
-#             behind.append({
-#                 'book': plan.book.title,
-#                 'expected': expected_pages,
-#                 'actual': actual_pages,
-#                 'difference': expected_pages - actual_pages
-#             })
+    for plan in plans:
+        total_days = (today - plan.start_date).days + 1
+        expected_pages = plan.daily_target_pages * total_days
+        actual_pages = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
+        if actual_pages < expected_pages:
+            behind.append({
+                'book': plan.book.title,
+                'expected': expected_pages,
+                'actual': actual_pages,
+                'difference': expected_pages - actual_pages
+            })
 
-#     return render(request, 'reading/behind_alerts.html', {'behind': behind})
+    return render(request, 'reading/behind_alerts.html', {'behind': behind})
 
 
 @login_required
@@ -170,8 +171,12 @@ def check_falling_behind(request):
     behind = []
 
     for plan in plans:
-        total_pages_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-        days_passed = (today - plan.start_date).days + 1
+        # Dynamically calculate total pages read
+        total_pages_read = sum(progress.pages_read for progress in ReadingProgress.objects.filter(plan=plan))
+        
+        # Calculate how many days have passed
+        days_passed = (today - plan.start_date).days + 1  # +1 to include today
+
         expected_pages = plan.daily_target_pages * days_passed
 
         if total_pages_read < expected_pages:
@@ -179,11 +184,9 @@ def check_falling_behind(request):
             total_pages = plan.book.total_pages or 0
             remaining_pages = total_pages - total_pages_read
 
-            if remaining_days > 0:
-                # 📈 Smart revised target
-                revised_target = ceil((expected_pages - total_pages_read + (plan.daily_target_pages * remaining_days)) / remaining_days)
-            else:
-                revised_target = None
+            revised_target = (
+                ceil(remaining_pages / remaining_days) if remaining_days > 0 else None
+            )
 
             behind.append({
                 'book': plan.book.title,
@@ -200,7 +203,7 @@ def check_falling_behind(request):
 def delete_goal(request, goal_id):
     goal = get_object_or_404(ReadingGoal, id=goal_id, user=request.user)
     goal.delete()
-    return redirect('reading_dashboard') 
+    return redirect('reading_dashboard')  # or whatever your dashboard page is
 
 def about_shelfbuddy(request):
     return render(request, 'reading/about_shelfbuddy.html')
@@ -216,34 +219,3 @@ def edit_reading_plan(request, plan_id):
     else:
         form = ReadingPlanForm(instance=plan)
     return render(request, 'reading/edit_plan.html', {'form': form})
-
-@login_required
-def apply_suggested_target(request, plan_id):
-    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
-    revised_target = request.GET.get('revised_target')
-    if revised_target and revised_target.isdigit():
-        plan.daily_target_pages = int(revised_target)
-        plan.save()
-    return redirect('plan_detail', plan_id=plan.id)
-
-@login_required
-def reading_plan_detail(request, plan_id):
-    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
-    progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
-
-    total_read = sum(p.pages_read for p in progress)
-    plan.total_pages_read = total_read
-
-    # Avoid division by zero and use .total_pages from the related book
-    if plan.book and plan.book.total_pages:
-        percent_complete = (total_read / plan.book.total_pages) * 100
-    else:
-        percent_complete = 0
-
-    plan.percent_complete = round(min(percent_complete, 100), 1)  # cap at 100% and round
-
-    return render(request, 'reading/plan_detail.html', {
-        'plan': plan,
-        'progress': progress,
-        'total_read': total_read
-    })
