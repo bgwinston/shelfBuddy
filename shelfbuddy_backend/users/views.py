@@ -130,10 +130,10 @@ def edit_profile_view(request):
                 'error': 'Failed to update profile info.'
             })
 
-        # Handle password change
+     
         if password_form.is_valid():
             password_form.save()
-            update_session_auth_hash(request, user)  # Keeps user logged in
+            update_session_auth_hash(request, user)  
             return redirect('profile')
 
         elif password_form.cleaned_data:
@@ -151,3 +151,5 @@ def edit_profile_view(request):
         'password_form': password_form,
         'genres': GENRES
     })
+    
+    

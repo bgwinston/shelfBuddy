@@ -1,32 +1,40 @@
 {% extends 'reading/base.html' %}
+{% load static %}
+
+{% block title %}Behind on Reading Plans{% endblock %}
 
 {% block content %}
-<div class="behind-page-container">
+<div class="behind-page-container" style="max-width: 700px; margin: 40px auto; font-family: Arial, sans-serif;">
 
-  <h2 class="behind-header">🚨 Behind on Reading Plans</h2>
+  <h2 class="behind-header" style="color: #c0392b; text-align: center;">🚨 Behind on Reading Plans</h2>
 
-  <ul class="behind-list">
+  <ul class="behind-list" style="list-style: none; padding: 0;">
     {% for item in behind %}
-      <li>
-        <strong>{{ item.book }}</strong>: You are {{ item.difference }} pages behind ({{ item.actual }} of {{ item.expected }} pages read).<br>
+      <li style="background: #f8f8f8; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+        <strong>{{ item.book }}</strong>:<br>
+        You are <strong>{{ item.difference }}</strong> pages behind 
+        ({{ item.actual }} of {{ item.expected }} pages read).<br><br>
 
         {% if item.difference <= 10 %}
-          Suggestion: Add just a few extra pages per day — you’ll catch up in no time! 💪
+          <span style="color: #27ae60;">Suggestion: Add just a few extra pages per day — you’ll catch up in no time! 💪</span>
         {% elif item.difference <= 30 %}
-          Suggestion: Try reading 5–10 more pages daily this week to close the gap. 📖
+          <span style="color: #f39c12;">Suggestion: Try reading 5–10 more pages daily this week to close the gap. 📖</span>
         {% else %}
-          Suggestion: Consider extending your end date or setting shorter daily goals temporarily. 🛠️
+          <span style="color: #e74c3c;">Suggestion: Consider extending your end date or setting shorter daily goals temporarily. 🛠️</span>
         {% endif %}
 
         {% if item.revised_target %}
-          <br><em>📈 New suggested daily goal:</em> {{ item.revised_target }} pages/day
+          <br><br><em>📈 New suggested daily goal:</em> <strong>{{ item.revised_target }}</strong> pages/day
         {% endif %}
       </li>
     {% empty %}
-      <li>🎉 You're on track with all your reading plans!</li>
+      <li style="text-align: center; font-size: 18px;">🎉 You're on track with all your reading plans!</li>
     {% endfor %}
   </ul>
-  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="{% url 'reading_dashboard' %}" style="text-decoration: none; background: #3498db; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold;">← Back to Dashboard</a>
+  </div>
 
 </div>
 {% endblock %}

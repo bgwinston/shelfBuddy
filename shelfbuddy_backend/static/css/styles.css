@@ -431,3 +431,23 @@ body {
   gap: 20px;
   flex-wrap: wrap;
 }
+
+.apply-button, .decline-button {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.apply-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.decline-button {
+  background-color: #d9534f;
+  color: white;
+}

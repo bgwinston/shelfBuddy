@@ -23,31 +23,31 @@ def create_reading_plan(request):
         form = ReadingPlanForm()
     return render(request, 'reading/create_plan.html', {'form': form})
 
-@login_required
-def reading_plan_detail(request, plan_id):
-    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
-    progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
-    total_read = sum(p.pages_read for p in progress)
+# @login_required
+# def reading_plan_detail(request, plan_id):
+#     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+#     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
+#     total_read = sum(p.pages_read for p in progress)
 
-    # ✅ Calculate the percent complete
-    total_days = (plan.target_end_date - plan.start_date).days + 1
-    total_goal_pages = plan.daily_target_pages * total_days
+#     # ✅ Calculate the percent complete
+#     total_days = (plan.target_end_date - plan.start_date).days + 1
+#     total_goal_pages = plan.daily_target_pages * total_days
 
-    if total_goal_pages > 0:
-        percent_complete = (total_read / total_goal_pages) * 100
-    else:
-        percent_complete = 0
+#     if total_goal_pages > 0:
+#         percent_complete = (total_read / total_goal_pages) * 100
+#     else:
+#         percent_complete = 0
 
-    if percent_complete > 100:
-        percent_complete = 100  # ✅ cap it at 100%
+#     if percent_complete > 100:
+#         percent_complete = 100  # ✅ cap it at 100%
 
-    plan.percent_complete = round(percent_complete, 1)  # round to 1 decimal if you want
+#     plan.percent_complete = round(percent_complete, 1)  # round to 1 decimal if you want
 
-    return render(request, 'reading/plan_detail.html', {
-        'plan': plan,
-        'progress': progress,
-        'total_read': total_read,
-    })
+#     return render(request, 'reading/plan_detail.html', {
+#         'plan': plan,
+#         'progress': progress,
+#         'total_read': total_read,
+#     })
 @login_required
 def log_progress(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
@@ -218,3 +218,34 @@ def edit_reading_plan(request, plan_id):
     else:
         form = ReadingPlanForm(instance=plan)
     return render(request, 'reading/edit_plan.html', {'form': form})
+
+@login_required
+def apply_suggested_target(request, plan_id):
+    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    revised_target = request.GET.get('revised_target')
+    if revised_target and revised_target.isdigit():
+        plan.daily_target_pages = int(revised_target)
+        plan.save()
+    return redirect('plan_detail', plan_id=plan.id)
+
+@login_required
+def reading_plan_detail(request, plan_id):
+    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
+
+    total_read = sum(p.pages_read for p in progress)
+    plan.total_pages_read = total_read
+
+    # Avoid division by zero and use .total_pages from the related book
+    if plan.book and plan.book.total_pages:
+        percent_complete = (total_read / plan.book.total_pages) * 100
+    else:
+        percent_complete = 0
+
+    plan.percent_complete = round(min(percent_complete, 100), 1)  # cap at 100% and round
+
+    return render(request, 'reading/plan_detail.html', {
+        'plan': plan,
+        'progress': progress,
+        'total_read': total_read
+    })
