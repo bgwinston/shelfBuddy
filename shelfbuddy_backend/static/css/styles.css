@@ -30,7 +30,7 @@ body {
   border-bottom: 1px solid #ccc;
 }
 
-.top-left img { max-height: 85px; }
+.top-left img { max-height: 100px; }
 
 .page-title { font-size: 20px; font-weight: 600; color: var(--color-text); margin: 0; }
 
@@ -149,7 +149,7 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Dashboard */
+/*dashboard*/
 .dashboard-heading {
   text-align: center;
   font-size: 28px;
@@ -377,7 +377,7 @@ body {
 }
 
 .logout-button {
-  background: #ef3e36;
+  background: red;
   border: none;
   cursor: pointer;
   font-family: inherit; 
