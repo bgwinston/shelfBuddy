@@ -1,4 +1,4 @@
-from .views import create_reading_plan, reading_plan_detail, log_progress, weekly_report, check_falling_behind,reading_dashboard, create_goal_view, delete_goal,about_shelfbuddy, edit_reading_plan, reading_plan_detail, apply_suggested_target
+from .views import create_reading_plan, reading_plan_detail, log_progress, weekly_report, check_falling_behind,reading_dashboard, create_goal_view, delete_goal,about_shelfbuddy, edit_reading_plan, reading_plan_detail
 from django.urls import path
 
 
