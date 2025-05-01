@@ -14,5 +14,4 @@ path('goal/<int:goal_id>/delete/', delete_goal, name='delete_goal'),
 path('about/', about_shelfbuddy, name='about_shelfbuddy'),
 path('reading-plan/<int:plan_id>/edit/',edit_reading_plan, name='edit_reading_plan'),
 path('plan/<int:plan_id>/',reading_plan_detail, name='reading_plan_detail'),
-path('plan/<int:plan_id>/apply/', apply_suggested_target, name='apply_suggested_target'),
 ]
