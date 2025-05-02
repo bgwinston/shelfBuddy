@@ -6,7 +6,7 @@ from shelfbuddy_backend.reading.models import ReadingPlan, ReadingProgress, Read
 from shelfbuddy_backend.books.models import Book
 from datetime import date, timedelta
 from shelfbuddy_backend.users.models import CustomUser
-import re
+import re # for password validation
 
 
 # Handles user registration with validation and creation of a new user account
