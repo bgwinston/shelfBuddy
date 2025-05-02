@@ -6,11 +6,15 @@ from shelfbuddy_backend.reading.models import ReadingPlan, ReadingProgress, Read
 from shelfbuddy_backend.books.models import Book
 from datetime import date, timedelta
 from shelfbuddy_backend.users.models import CustomUser
+import re
 
+
+# Handles user registration with validation and creation of a new user account
 def register_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
         first_name = request.POST.get('first_name')
         email = request.POST.get('email')
         favorite_genre = request.POST.get('favorite_genre', '')
@@ -18,15 +22,23 @@ def register_view(request):
         if favorite_genre == "Other":
             favorite_genre = request.POST.get('other_genre', '')
 
+        # Check if username or email already exists
         if CustomUser.objects.filter(username=username).exists():
             return render(request, 'users/register.html', {'error': 'Username already exists'})
-
         if CustomUser.objects.filter(email=email).exists():
             return render(request, 'users/register.html', {'error': 'Email already in use'})
 
-        if password != request.POST.get('confirm_password'):
+        # Check password match
+        if password != confirm_password:
             return render(request, 'users/register.html', {'error': 'Passwords do not match'})
 
+        # Password requirements: minimum 8 characters and at least one special character
+        if len(password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            return render(request, 'users/register.html', {
+                'error': 'Password must be at least 8 characters long and include a special character.'
+            })
+
+        # Create the user
         user = CustomUser.objects.create_user(
             username=username,
             password=password,
@@ -39,7 +51,7 @@ def register_view(request):
 
     return render(request, 'users/register.html')
 
-
+# Authenticates the user and redirects to dashboard if successful
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -55,7 +67,7 @@ def login_view(request):
 
     return render(request, 'users/login.html')
 
-
+# Displays a personalized dashboard for the logged-in user with book and reading plan highlights
 @login_required
 def dashboard_view(request):
     currently_reading = Book.objects.filter(user=request.user, status='in_progress')[:3]
@@ -81,28 +93,28 @@ def dashboard_view(request):
         'behind_alerts': behind_alerts,
     })
 
-
+# Loads the book search page where the user can add new books
 @login_required
 def add_book_view(request):
     return render(request, 'books/booksearch.html')
 
-
+# Logs the user out and redirects to the login screen
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-
+# Displays the user's current reading plans in a dashboard
 @login_required
 def reading_dashboard(request):
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
     return render(request, 'reading/reading_dashboard.html', {'plans': plans})
 
-
+# Shows the user's profile details
 @login_required
 def profile_view(request):
     return render(request, 'users/profile_view.html', {'user': request.user})
 
-
+# Allows the user to edit their profile information and optionally update their password
 @login_required
 def edit_profile_view(request):
     user = request.user
@@ -130,7 +142,7 @@ def edit_profile_view(request):
                 'error': 'Failed to update profile info.'
             })
 
-     
+        # Handle password update
         if password_form.is_valid():
             password_form.save()
             update_session_auth_hash(request, user)  
@@ -151,5 +163,11 @@ def edit_profile_view(request):
         'password_form': password_form,
         'genres': GENRES
     })
-    
-    
+
+# Custom handler for 404 (Page Not Found) errors
+def handler404(request, exception):
+    return render(request, 'errors/404.html', status=404)
+
+# Custom handler for 504 (Gateway Timeout) errors
+def handler504(request, exception=None):
+    return render(request, 'errors/504.html', status=504)
