@@ -86,15 +86,18 @@ def weekly_report(request):
         )
         pages_this_week = sum(p.pages_read for p in progress_qs)
 
-        # Calculate weekly target
-        total_days = (plan.target_end_date - plan.start_date).days + 1
-        total_weeks = max(total_days // 7, 1)
-        weekly_target = plan.book.total_pages // total_weeks if plan.book.total_pages else plan.daily_target_pages * 7
+        # Calculate expected cumulative pages based on how far into the plan we are
+        if plan.start_date > today:
+            expected_pages = 0
+        else:
+            days_so_far = (min(today, plan.target_end_date) - plan.start_date).days + 1
+            expected_pages = plan.daily_target_pages * days_so_far
 
-        # Determine reading status
-        if today < plan.start_date and pages_this_week > 0:
-            status = "📈 Ahead of Schedule"
-        elif pages_this_week >= weekly_target:
+        # Total pages read so far
+        total_pages_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
+
+        # Determine overall reading status
+        if total_pages_read >= expected_pages:
             status = "✅ On Track"
         else:
             status = "⚠️ Behind Schedule"
@@ -102,7 +105,7 @@ def weekly_report(request):
         report_data.append({
             'book': plan.book.title,
             'pages_this_week': pages_this_week,
-            'weekly_target': weekly_target,
+            'weekly_target': plan.daily_target_pages * 7,
             'status': status,
         })
 
