@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-
 GENRE_CHOICES = [
     'Fiction',
     'Non-Fiction',
@@ -79,16 +78,19 @@ def book_view(request, book_id):
     response = requests.get(f'https://www.googleapis.com/books/v1/volumes/{book_id}')
     info = response.json().get('volumeInfo', {})
 
-    saved_book = Book.objects.filter(user=user, google_book_id=book_id).first()
+    # Check for any book saved by this user for this Google ID
+    all_books = Book.objects.filter(user=user, google_book_id=book_id)
+    library_book = all_books.filter(is_wishlist=False).first()
+    wishlist_book = all_books.filter(is_wishlist=True).first()
 
     book = {
         'title': info.get('title'),
         'authors': ', '.join(info.get('authors', [])),
         'description': info.get('description', ''),
         'thumbnail': info.get('imageLinks', {}).get('thumbnail', ''),
-        'rating': saved_book.rating if saved_book else None,
-        'is_saved': bool(saved_book),
-        'is_wishlist': saved_book.is_wishlist if saved_book else False,
+        'rating': (library_book or wishlist_book).rating if (library_book or wishlist_book) else None,
+        'is_library': bool(library_book),
+        'is_wishlist': bool(wishlist_book),
         'google_book_id': book_id,
         'genre': ', '.join(info.get('categories', [])),
     }
@@ -108,12 +110,18 @@ def save_book_view(request):
         source = request.POST.get('source', 'manual')
         google_book_id = request.POST.get('google_book_id', '')
 
-        # Optional: Prevent duplicates
-        if google_book_id:
-            existing = Book.objects.filter(user=user, google_book_id=google_book_id).first()
-            if existing:
-                return redirect('mylibrary')
+        # Check if book is already saved (wishlist OR library)
+        existing = Book.objects.filter(user=user, google_book_id=google_book_id).first()
+        if existing:
+            if existing.is_wishlist:
+                existing.is_wishlist = False
+                existing.save()
+                messages.success(request, "Book moved from wishlist to library.")
+            else:
+                messages.info(request, "This book is already in your library.")
+            return redirect('mylibrary')
 
+        # Otherwise, save to library
         total_pages = None
         if google_book_id:
             try:
@@ -133,7 +141,8 @@ def save_book_view(request):
             cover_image=cover_image,
             source=source,
             google_book_id=google_book_id,
-            total_pages=total_pages
+            total_pages=total_pages,
+            is_wishlist=False
         )
 
     return redirect('mylibrary')
@@ -223,21 +232,28 @@ def add_to_wishlist(request):
         google_book_id = request.POST.get('google_book_id')
         source = request.POST.get('source', 'manual')
 
-        if title:  # Ensure at least title exists
-            Book.objects.create(
-                user=request.user,
-                title=title,
-                author=author,
-                genre=genre,
-                description=description,
-                cover_image=cover_image,
-                source=source,
-                google_book_id=google_book_id,
-                is_wishlist=True
-            )
+        if not google_book_id or not title:
+            messages.error(request, "Missing required book information.")
+            return redirect('wishlist')
+
+        # Check if already saved in library or wishlist
+        if Book.objects.filter(user=request.user, google_book_id=google_book_id).exists():
+            messages.info(request, "This book is already saved.")
+            return redirect('wishlist')
+
+        Book.objects.create(
+            user=request.user,
+            title=title,
+            author=author,
+            genre=genre,
+            description=description,
+            cover_image=cover_image,
+            source=source,
+            google_book_id=google_book_id,
+            is_wishlist=True
+        )
 
     return redirect('wishlist')
-
 
 
 @login_required
@@ -265,10 +281,11 @@ def my_library_view(request):
     if query:
         books = Book.objects.filter(
             Q(user=request.user),
-            Q(title__icontains=query) | Q(author__icontains=query)
+            Q(title__icontains=query) | Q(author__icontains=query),
+            is_wishlist=False 
         )
     else:
-        books = Book.objects.filter(user=request.user)
+        books = Book.objects.filter(user=request.user, is_wishlist=False)  # ✅
     
     return render(request, 'books/mylibrary.html', {'books': books})
 

@@ -24,7 +24,7 @@
     </p>
   {% endif %}
 
-  {% if not book.is_saved %}
+  {% if not book.is_library and not book.is_wishlist %}
     <form method="post" action="{% url 'save-book' %}">
       {% csrf_token %}
       <input type="hidden" name="title" value="{{ book.title }}">
@@ -48,16 +48,24 @@
       <input type="hidden" name="source" value="google">
       <button type="submit">🤍 Add to Wishlist</button>
     </form>
-  {% else %}
-    {% if book.is_wishlist %}
-      <p><strong>Status:</strong> In Wishlist</p>
-    {% else %}
-      <p><strong>Status:</strong> Already in Library ✅</p>
-    {% endif %}
+  {% elif book.is_wishlist %}
+    <p><strong>Status:</strong> In Wishlist</p>
+    <form method="post" action="{% url 'save-book' %}">
+      {% csrf_token %}
+      <input type="hidden" name="title" value="{{ book.title }}">
+      <input type="hidden" name="authors" value="{{ book.authors }}">
+      <input type="hidden" name="description" value="{{ book.description }}">
+      <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
+      <input type="hidden" name="genre" value="{{ book.genre }}">
+      <input type="hidden" name="google_book_id" value="{{ book.google_book_id }}">
+      <input type="hidden" name="source" value="google">
+      <button type="submit">📚 Move to Library</button>
+    </form>
+  {% elif book.is_library %}
+    <p><strong>Status:</strong> Already in Library ✅</p>
   {% endif %}
 
   <br>
   <a href="{% url 'booksearch' %}" class="back-link">← Back to Search</a>
-
 </div> 
 {% endblock %}

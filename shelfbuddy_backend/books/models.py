@@ -17,9 +17,9 @@ class Book(models.Model):
     title = models.CharField(max_length=500)
     author = models.CharField(max_length=500)
     source = models.CharField(max_length=20, default='manual')
-    google_book_id = models.CharField(max_length=50, blank=True, null=True)
+    google_book_id = models.CharField(max_length=50, blank=True, null=False, default='unknown')
     total_pages = models.PositiveIntegerField(null=True, blank=True)
-    
+
     date_added = models.DateTimeField(auto_now_add=True)
     genre = models.CharField(max_length=300, blank=True)
 
@@ -39,9 +39,8 @@ class Book(models.Model):
     is_loaned = models.BooleanField(default=False)
     is_wishlist = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = ('user', 'google_book_id', 'is_wishlist')
+
     def __str__(self):
         return f"{self.title} by {self.author}"
-    
-
-
-
