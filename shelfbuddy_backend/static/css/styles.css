@@ -318,7 +318,7 @@ body {
 
 .field-value {
   font-size: 14px;
-  color: var(--color-text); /* dark navy, almost black */
+  color: var(--color-text); 
 }
 
 .field-list p strong {
@@ -329,17 +329,17 @@ body {
   color: var(--color-text);
   font-size: 16px;
   margin-bottom: 12px;
-  word-break: break-word; /* So it wraps nicely */
+  word-break: break-word; 
 }
 
 .library-table {
   width: 100%;
-  border-collapse: collapse; /* This makes the borders collapse nicely */
+  border-collapse: collapse; 
 }
 
 .library-table th, 
 .library-table td {
-  border: 1px solid #ccc; /* Light gray lines */
+  border: 1px solid #ccc; 
   padding: 10px;
   text-align: center;
 }
@@ -385,7 +385,7 @@ body {
 
 .page-title {
   font-size: 32px; 
-  font-weight: 700; /* 🔥 Make it a little bolder */
+  font-weight: 700; 
   color: var(--color-text);
   margin: 0;
 }

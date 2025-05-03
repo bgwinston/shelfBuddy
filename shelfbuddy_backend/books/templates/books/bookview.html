@@ -1,7 +1,7 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
-<div class="book-view-container">  <!-- ⭐️ ADD THIS WRAPPER -->
+<div class="book-view-container"> 
 
   <h2>{{ book.title }}</h2>
   <p><strong>Author(s):</strong> {{ book.authors }}</p>
@@ -59,5 +59,5 @@
   <br>
   <a href="{% url 'booksearch' %}" class="back-link">← Back to Search</a>
 
-</div> <!-- ⭐️ CLOSE THE WRAPPER -->
+</div> 
 {% endblock %}

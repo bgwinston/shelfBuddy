@@ -472,3 +472,86 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
 }
+.form-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.form-columns {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1;
+}
+
+.form-container label {
+  font-weight: bold;
+  display: block;
+  margin-top: 15px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="date"],
+.form-container input[type="number"],
+.form-container textarea,
+.form-container select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.star-rating {
+  font-size: 2em;
+  color: #ccc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.star-rating .star.selected {
+  color: gold;
+}
+
+.form-container button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.form-container button:hover {
+  background-color: #45a049;
+}
+
+.form-container .delete-btn {
+  background-color: #d9534f;
+}
+
+.form-container .delete-btn:hover {
+  background-color: #c9302c;
+}
+
+.form-container a {
+  display: inline-block;
+  margin-top: 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}

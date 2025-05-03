@@ -1,4 +1,3 @@
-# reading/models.py
 from django.db import models
 from shelfbuddy_backend.users.models import CustomUser
 
@@ -14,7 +13,7 @@ class ReadingGoal(models.Model):
     ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    plan = models.ForeignKey('ReadingPlan', on_delete=models.CASCADE, null=True, blank=True, related_name='goals')  # 🔗 NEW FIELD
+    plan = models.ForeignKey('ReadingPlan', on_delete=models.CASCADE, null=True, blank=True, related_name='goals')  
     name = models.CharField(max_length=100)
     goal_type = models.CharField(max_length=20, choices=GOAL_TYPE_CHOICES)
     target_amount = models.PositiveIntegerField()
