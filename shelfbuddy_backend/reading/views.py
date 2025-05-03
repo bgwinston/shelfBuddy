@@ -60,31 +60,47 @@ def log_progress(request, plan_id):
     return render(request, 'reading/log_progress.html', {'form': form, 'plan': plan})
 
 # Generates a weekly report of progress toward active reading plans
-@login_required
 def weekly_report(request):
-    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-    report_data = []
+    user = request.user
     today = date.today()
-    week_start = today - timedelta(days=today.weekday())
+    week_start = today - timedelta(days=today.weekday())  # Monday
+    week_end = week_start + timedelta(days=6)  # Sunday
+
+    plans = ReadingPlan.objects.filter(user=user)
+    report_data = []
 
     for plan in plans:
-        weekly_progress = ReadingProgress.objects.filter(plan=plan, date__range=[week_start, today])
-        pages_this_week = sum(p.pages_read for p in weekly_progress)
-        days_so_far = (today - week_start).days + 1
+        # Calculate how many pages the user read this week
+        progress_qs = ReadingProgress.objects.filter(
+            plan=plan,
+            date__range=[week_start, week_end]
+        )
+        pages_this_week = sum(p.pages_read for p in progress_qs)
+
+        # Calculate weekly target
+        total_days = (plan.target_end_date - plan.start_date).days + 1
+        total_weeks = max(total_days // 7, 1)
+        weekly_target = plan.book.total_pages // total_weeks if plan.book.total_pages else plan.daily_target_pages * 7
+
+        # Determine reading status
+        if today < plan.start_date and pages_this_week > 0:
+            status = "📈 Ahead of Schedule"
+        elif pages_this_week >= weekly_target:
+            status = "✅ On Track"
+        else:
+            status = "⚠️ Behind Schedule"
 
         report_data.append({
             'book': plan.book.title,
             'pages_this_week': pages_this_week,
-            'daily_target': plan.daily_target_pages,
-            'weekly_target': plan.daily_target_pages * 7,
-            'expected_by_now': plan.daily_target_pages * days_so_far,
-            'on_track': pages_this_week >= plan.daily_target_pages * days_so_far,
+            'weekly_target': weekly_target,
+            'status': status,
         })
 
     return render(request, 'reading/weekly_report.html', {
-        'report_data': report_data,
         'week_start': week_start,
-        'week_end': today
+        'week_end': week_end,
+        'report_data': report_data,
     })
 
 # Checks which reading plans are falling behind based on expected vs actual pages read

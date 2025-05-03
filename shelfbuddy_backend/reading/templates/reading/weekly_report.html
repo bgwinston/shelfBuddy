@@ -21,10 +21,12 @@
       <p>Pages Read This Week: {{ item.pages_this_week }}</p>
       <p>Target Pages: {{ item.weekly_target }}</p>
       <p>Status: 
-        {% if item.on_track %}
-          <span class="on-track">✅ On Track</span>
+        {% if "Ahead" in item.status %}
+          <span class="on-track">{{ item.status }}</span>
+        {% elif "Behind" in item.status %}
+          <span class="behind">{{ item.status }}</span>
         {% else %}
-          <span class="behind">⚠️ Behind Schedule</span>
+          <span>{{ item.status }}</span>
         {% endif %}
       </p>
     </div>
