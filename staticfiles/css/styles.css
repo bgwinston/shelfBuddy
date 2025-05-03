@@ -173,30 +173,6 @@ body {
 
 .dashboard-section h2 { color: var(--color-text); }
 
-/* Progress Bar */
-.progress-bar-container {
-  background: #e0e0e0;
-  border-radius: 12px;
-  height: 24px;
-  overflow: hidden;
-  margin: 15px 0;
-}
-
-.progress-bar { height: 100%; width: 100%; }
-
-.progress-fill {
-  height: 100%;
-  text-align: center;
-  line-height: 24px;
-  color: var(--color-light);
-  font-weight: bold;
-  transition: width 0.6s ease;
-}
-
-.progress-green { background: var(--color-progress-good); }
-.progress-yellow { background: var(--color-progress-warning); }
-.progress-red { background: var(--color-progress-bad); }
-
 /* Alerts */
 .behind-alert-banner {
   background: var(--color-danger);
@@ -418,4 +394,72 @@ body {
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+}
+.reading-sections {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.reading-column {
+  flex: 1;
+  min-width: 320px;
+  max-width: 48%;
+}
+
+.plan-card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.progress-bar-container {
+  width: 60%;
+  margin: 10px auto;
+  background-color: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #ddd;
+}
+
+.progress-fill {
+  height: 100%;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+}
+
+.progress-green {
+  background-color: #4caf50;
+}
+
+.button {
+  padding: 8px 16px;
+  background-color: #8bc34a;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.button:hover {
+  background-color: #689f38;
+}
+
+.button-turquoise {
+  background-color: #4dd0e1;
+}
+
+.button-turquoise:hover {
+  background-color: #26c6da;
 }

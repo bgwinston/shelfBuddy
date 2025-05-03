@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ReadingPlan, ReadingProgress, ReadingGoal, ReadingPlan
 from .forms import ReadingPlanForm, ReadingProgressForm
@@ -11,6 +10,7 @@ from datetime import date
 from django.shortcuts import get_object_or_404, redirect
 from .models import ReadingGoal
 
+# View to create a new reading plan for the logged-in user
 @login_required
 def create_reading_plan(request):
     if request.method == 'POST':
@@ -24,31 +24,27 @@ def create_reading_plan(request):
         form = ReadingPlanForm()
     return render(request, 'reading/create_plan.html', {'form': form})
 
+# View to show details of a specific reading plan, including percent complete
 @login_required
 def reading_plan_detail(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
     total_read = sum(p.pages_read for p in progress)
 
-    # ✅ Calculate the percent complete
     total_days = (plan.target_end_date - plan.start_date).days + 1
     total_goal_pages = plan.daily_target_pages * total_days
 
-    if total_goal_pages > 0:
-        percent_complete = (total_read / total_goal_pages) * 100
-    else:
-        percent_complete = 0
-
-    if percent_complete > 100:
-        percent_complete = 100  
-
-    plan.percent_complete = round(percent_complete, 1) 
+    percent_complete = (total_read / total_goal_pages) * 100 if total_goal_pages > 0 else 0
+    percent_complete = min(percent_complete, 100)
+    plan.percent_complete = round(percent_complete, 1)
 
     return render(request, 'reading/plan_detail.html', {
         'plan': plan,
         'progress': progress,
         'total_read': total_read,
     })
+
+# View for logging reading progress to a specific plan
 @login_required
 def log_progress(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
@@ -63,6 +59,7 @@ def log_progress(request, plan_id):
         form = ReadingProgressForm()
     return render(request, 'reading/log_progress.html', {'form': form, 'plan': plan})
 
+# Generates a weekly report of progress toward active reading plans
 @login_required
 def weekly_report(request):
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
@@ -71,11 +68,9 @@ def weekly_report(request):
     week_start = today - timedelta(days=today.weekday())
 
     for plan in plans:
-        weekly_progress = ReadingProgress.objects.filter(
-            plan=plan, date__range=[week_start, today]
-        )
+        weekly_progress = ReadingProgress.objects.filter(plan=plan, date__range=[week_start, today])
         pages_this_week = sum(p.pages_read for p in weekly_progress)
-        days_so_far = (today - week_start).days + 1  # Include today
+        days_so_far = (today - week_start).days + 1
 
         report_data.append({
             'book': plan.book.title,
@@ -92,27 +87,35 @@ def weekly_report(request):
         'week_end': today
     })
 
+# Checks which reading plans are falling behind based on expected vs actual pages read
 @login_required
 def check_falling_behind(request):
+    today = date.today()
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
     behind = []
-    today = date.today()
 
     for plan in plans:
-        total_days = (today - plan.start_date).days + 1
-        expected_pages = plan.daily_target_pages * total_days
-        actual_pages = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-        if actual_pages < expected_pages:
+        total_pages_read = sum(progress.pages_read for progress in ReadingProgress.objects.filter(plan=plan))
+        days_passed = (today - plan.start_date).days + 1
+        expected_pages = plan.daily_target_pages * days_passed
+
+        if total_pages_read < expected_pages:
+            remaining_days = (plan.target_end_date - today).days
+            total_pages = plan.book.total_pages or 0
+            remaining_pages = total_pages - total_pages_read
+            revised_target = ceil(remaining_pages / remaining_days) if remaining_days > 0 else None
+
             behind.append({
                 'book': plan.book.title,
                 'expected': expected_pages,
-                'actual': actual_pages,
-                'difference': expected_pages - actual_pages
+                'actual': total_pages_read,
+                'difference': expected_pages - total_pages_read,
+                'revised_target': revised_target,
             })
 
     return render(request, 'reading/behind_alerts.html', {'behind': behind})
 
-
+# Main reading dashboard that shows active plans, goals, and behind alerts
 @login_required
 def reading_dashboard(request):
     plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
@@ -123,23 +126,12 @@ def reading_dashboard(request):
 
     for plan in plans:
         total_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-
-        # ✅ Calculate percentage complete
         total_days = (plan.target_end_date - plan.start_date).days + 1
         total_goal_pages = plan.daily_target_pages * total_days
 
-        if total_goal_pages > 0:
-            percent_complete = (total_read / total_goal_pages) * 100
-        else:
-            percent_complete = 0
+        percent_complete = (total_read / total_goal_pages) * 100 if total_goal_pages > 0 else 0
+        plan.percent_complete = round(min(percent_complete, 100), 1)
 
-        # Cap at 100%
-        if percent_complete > 100:
-            percent_complete = 100
-
-        plan.percent_complete = round(percent_complete, 1)
-
-        # ✅ Handle behind alerts
         expected_pages = plan.daily_target_pages * (today - plan.start_date).days + 1
         if total_read < expected_pages:
             behind_alerts.append(plan)
@@ -149,6 +141,8 @@ def reading_dashboard(request):
         'goals': goals,
         'behind_alerts': behind_alerts,
     })
+
+# View to create a new reading goal for the user
 @login_required
 def create_goal_view(request):
     if request.method == 'POST':
@@ -162,52 +156,17 @@ def create_goal_view(request):
         form = ReadingGoalForm()
     return render(request, 'reading/create_goal.html', {'form': form})
 
-from .models import ReadingProgress
-
-@login_required
-def check_falling_behind(request):
-    today = date.today()
-    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-    behind = []
-
-    for plan in plans:
-        # Dynamically calculate total pages read
-        total_pages_read = sum(progress.pages_read for progress in ReadingProgress.objects.filter(plan=plan))
-        
-        # Calculate how many days have passed
-        days_passed = (today - plan.start_date).days + 1  # +1 to include today
-
-        expected_pages = plan.daily_target_pages * days_passed
-
-        if total_pages_read < expected_pages:
-            remaining_days = (plan.target_end_date - today).days
-            total_pages = plan.book.total_pages or 0
-            remaining_pages = total_pages - total_pages_read
-
-            revised_target = (
-                ceil(remaining_pages / remaining_days) if remaining_days > 0 else None
-            )
-
-            behind.append({
-                'book': plan.book.title,
-                'expected': expected_pages,
-                'actual': total_pages_read,
-                'difference': expected_pages - total_pages_read,
-                'revised_target': revised_target,
-            })
-
-    return render(request, 'reading/behind_alerts.html', {'behind': behind})
-
-
-
+# Deletes a reading goal for the logged-in user
 def delete_goal(request, goal_id):
     goal = get_object_or_404(ReadingGoal, id=goal_id, user=request.user)
     goal.delete()
-    return redirect('reading_dashboard')  # or whatever your dashboard page is
+    return redirect('reading_dashboard')
 
+# Static informational page about ShelfBuddy
 def about_shelfbuddy(request):
     return render(request, 'reading/about_shelfbuddy.html')
 
+# View to edit an existing reading plan
 @login_required
 def edit_reading_plan(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
