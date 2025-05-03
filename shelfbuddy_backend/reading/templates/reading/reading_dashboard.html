@@ -8,84 +8,86 @@
   </div>
 {% endif %}
 
-<!-- 📌 Action Links Row -->
+<!-- Action Links Row -->
 <div class="reading-actions" style="margin: 20px 0; text-align: center;">
   <a href="{% url 'create_reading_plan' %}" class="button">➕ Create Plan</a>
-  <a href="{% url 'create_goal' %}" class="button">🎯 Set Goal</a>
   <a href="{% url 'weekly_report' %}" class="button">📈 Weekly Report</a>
   <a href="{% url 'check_falling_behind' %}" class="button">📉 Check Behind</a>
 </div>
 
-<!-- 📚 Plans and 🎯 Goals Side-by-Side -->
-<div class="reading-sections">
-  <!-- Reading Plans -->
-  <div class="reading-column">
-    <h2>📚 My Reading Plans</h2>
+<!-- ✅Wrap BOTH columns inside .dashboard-wide -->
+<div class="dashboard-wide">
+  <div class="reading-sections">
+  
+    <!--  Reading Plans -->
+    <div class="reading-column">
+      <h2>📚 My Reading Plans</h2>
 
-    {% if plans %}
-      {% for plan in plans %}
-        <div class="plan-card">
-          <h3>
-            {{ plan.book.title }}
-            {% if plan in behind_alerts %}
-              <span style="color: red; font-size: 1.2em; margin-left: 8px;">🚨</span>
-            {% endif %}
-          </h3>
+      {% if plans %}
+        {% for plan in plans %}
+          <div class="plan-card">
+            <h3>
+              {{ plan.book.title }}
+              {% if plan in behind_alerts %}
+                <span style="color: red; font-size: 1.2em; margin-left: 8px;">🚨</span>
+              {% endif %}
+            </h3>
 
-          <p><strong>Start:</strong> {{ plan.start_date|date:"M d, Y" }}</p>
-          <p><strong>End:</strong> {{ plan.target_end_date|date:"M d, Y" }}</p>
-          <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
-          <p><strong>Progress:</strong> {{ plan.percent_complete|floatformat:0 }}%</p>
+            <p><strong>Start:</strong> {{ plan.start_date|date:"M d, Y" }}</p>
+            <p><strong>End:</strong> {{ plan.target_end_date|date:"M d, Y" }}</p>
+            <p><strong>Daily Target:</strong> {{ plan.daily_target_pages }} pages/day</p>
+            <p><strong>Progress:</strong> {{ plan.percent_complete|floatformat:0 }}%</p>
 
-          <div class="progress-bar-container">
-            <div class="progress-bar">
-              <div class="progress-fill progress-green" style="width: {{ plan.percent_complete|floatformat:0 }}%;">
-                {{ plan.percent_complete|floatformat:0 }}%
+            <div class="progress-bar-container">
+              <div class="progress-bar">
+                <div class="progress-fill progress-green" style="width: {{ plan.percent_complete|floatformat:0 }}%;">
+                  {{ plan.percent_complete|floatformat:0 }}%
+                </div>
               </div>
             </div>
+
+            <div style="margin-top: 10px;">
+              <a href="{% url 'reading_plan_detail' plan.id %}" class="button">📖 View Details</a>
+              <a href="{% url 'edit_reading_plan' plan.id %}" class="button button-turquoise" style="margin-left: 10px;">✏️ Edit Plan</a>
+            </div>
           </div>
-
-          <div style="margin-top: 10px;">
-            <a href="{% url 'reading_plan_detail' plan.id %}" class="button">📖 View Details</a>
-            <a href="{% url 'edit_reading_plan' plan.id %}" class="button button-turquoise" style="margin-left: 10px;">✏️ Edit Plan</a>
-          </div>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>You don't have any active reading plans yet.</p>
-    {% endif %}
-  </div>
-
-  <!-- Reading Goals -->
-  <div class="reading-column">
-    <h2>🎯 My Reading Goals</h2>
-
-    {% if goals %}
-      <ul style="margin-top: 15px;">
-        {% for goal in goals %}
-          <li style="margin-bottom: 10px;">
-            <strong>{{ goal.name }}</strong> —
-            {{ goal.target_amount }} {{ goal.goal_type }} by {{ goal.end_date }}
-            {% if goal.completed %}
-              ✅ <em>Completed</em>
-            {% else %}
-              🔄 <em>In Progress</em>
-            {% endif %}
-
-            <a href="{% url 'delete_goal' goal.id %}" class="button" style="font-size: 1em; padding: 8px 14px; background-color: #D32F2F; margin-left: 10px; border-radius: 6px; color: white;">
-              🗑️ Delete
-            </a>
-          </li>
         {% endfor %}
-      </ul>
-    {% else %}
-      <p>You have no active reading goals.</p>
-    {% endif %}
-
-    <!-- ✅ Button at bottom -->
-    <div style="margin-top: 20px;">
-      <a href="{% url 'create_goal' %}" class="button">➕ Set a New Goal</a>
+      {% else %}
+        <p>You don't have any active reading plans yet.</p>
+      {% endif %}
     </div>
+
+    <!--  Reading Goals -->
+    <div class="reading-column">
+      <h2>🎯 My Reading Goals</h2>
+
+      {% if goals %}
+        <ul style="margin-top: 15px;">
+          {% for goal in goals %}
+            <li style="margin-bottom: 10px;">
+              <strong>{{ goal.name }}</strong> —
+              {{ goal.target_amount }} {{ goal.goal_type }} by {{ goal.end_date }}
+              {% if goal.completed %}
+                ✅ <em>Completed</em>
+              {% else %}
+                🔄 <em>In Progress</em>
+              {% endif %}
+
+              <a href="{% url 'delete_goal' goal.id %}" class="button" style="font-size: 1em; padding: 8px 14px; background-color: #D32F2F; margin-left: 10px; border-radius: 6px; color: white;">
+                🗑️ Delete
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>You have no active reading goals.</p>
+      {% endif %}
+
+      <div style="margin-top: 20px;">
+        <a href="{% url 'create_goal' %}" class="button">➕ Set a New Goal</a>
+      </div>
+    </div>
+
   </div>
 </div>
 {% endblock %}
