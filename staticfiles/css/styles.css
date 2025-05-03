@@ -463,7 +463,4 @@ body {
 .button-turquoise:hover {
   background-color: #26c6da;
 }
-.dashboard-wide {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+
