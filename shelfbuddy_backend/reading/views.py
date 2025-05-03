@@ -40,7 +40,7 @@ def create_reading_plan(request):
     return render(request, 'reading/create_plan.html', {'form': form})
 
 # View to show details of a specific reading plan, including percent complete
-@login_required
+
 @login_required
 def reading_plan_detail(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
@@ -97,10 +97,14 @@ def weekly_report(request):
         total_pages_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
 
         # Determine overall reading status
-        if total_pages_read >= expected_pages:
+        if total_pages_read > expected_pages:
+            status = "📈 Ahead of Schedule"
+        elif total_pages_read == expected_pages:
             status = "✅ On Track"
-        else:
+        elif total_pages_read > 0:
             status = "⚠️ Behind Schedule"
+        else:
+            status = "📘 Not Started"
 
         report_data.append({
             'book': plan.book.title,
