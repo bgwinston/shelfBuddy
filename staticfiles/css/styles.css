@@ -30,7 +30,7 @@ body {
   border-bottom: 1px solid #ccc;
 }
 
-.top-left img { max-height: 85px; }
+.top-left img { max-height: 220px; }
 
 .page-title { font-size: 20px; font-weight: 600; color: var(--color-text); margin: 0; }
 
@@ -149,7 +149,7 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Dashboard */
+/*dashboard*/
 .dashboard-heading {
   text-align: center;
   font-size: 28px;
@@ -172,6 +172,30 @@ body {
 }
 
 .dashboard-section h2 { color: var(--color-text); }
+
+/* Progress Bar */
+.progress-bar-container {
+  background: #e0e0e0;
+  border-radius: 12px;
+  height: 24px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-bar { height: 100%; width: 100%; }
+
+.progress-fill {
+  height: 100%;
+  text-align: center;
+  line-height: 24px;
+  color: var(--color-light);
+  font-weight: bold;
+  transition: width 0.6s ease;
+}
+
+.progress-green { background: var(--color-progress-good); }
+.progress-yellow { background: var(--color-progress-warning); }
+.progress-red { background: var(--color-progress-bad); }
 
 /* Alerts */
 .behind-alert-banner {
@@ -294,7 +318,7 @@ body {
 
 .field-value {
   font-size: 14px;
-  color: var(--color-text); /* dark navy, almost black */
+  color: var(--color-text); 
 }
 
 .field-list p strong {
@@ -305,51 +329,63 @@ body {
   color: var(--color-text);
   font-size: 16px;
   margin-bottom: 12px;
-  word-break: break-word; /* So it wraps nicely */
+  word-break: break-word; 
 }
 
 .library-table {
   width: 100%;
-  border-collapse: collapse; /* This makes the borders collapse nicely */
+  border-collapse: collapse; 
 }
 
 .library-table th, 
 .library-table td {
-  border: 1px solid #ccc; /* Light gray lines */
+  border: 1px solid #ccc; 
   padding: 10px;
   text-align: center;
 }
 
 .library-table th {
-  background-color: var(--color-primary); /* Header background */
+  background-color: var(--color-primary); 
   color: white;
   font-weight: bold;
 }
 .top-right {
   display: flex;
-  flex-direction: column; /* 🔥 Stack items vertically */
-  align-items: flex-end;   /* 🔥 Align them to the right */
-  gap: 10px;               /* 🔥 Space between Profile/About/Logout */
+  flex-direction: column; 
+  align-items: flex-end;  
+  gap: 10px;              
 }
 
-.profile-link, .logout-button {
+.profile-link,
+.logout-button {
   text-decoration: none;
-  background: var(--color-primary);
   color: white;
-  padding: 8px 14px;
+  padding: 12px 14px;       
   border-radius: 6px;
   font-weight: bold;
+  font-size: 16px;           
+  line-height: 1.2;         
   text-align: center;
-  display: block; /* 🔥 Ensure each is full width inside its flex item */
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.logout-form {
-  margin: 0; /* 🔥 Remove default form margin */
+
+.profile-link {
+  background: #a6c64c; 
+}
+
+.logout-button {
+  background: red;
+  border: none;
+  cursor: pointer;
+  font-family: inherit; 
 }
 
 .page-title {
-  font-size: 32px; /* 🔥 Bigger welcome text */
-  font-weight: 700; /* 🔥 Make it a little bolder */
+  font-size: 32px; 
+  font-weight: 700; 
   color: var(--color-text);
   margin: 0;
 }
@@ -362,7 +398,7 @@ body {
 }
 .about-shelfbuddy-container {
   max-width: 700px;
-  margin: 60px auto; /* <-- centers horizontally */
+  margin: 60px auto; 
   padding: 40px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -379,7 +415,7 @@ body {
   list-style: none;
   padding: 0;
   margin-top: 20px;
-  text-align: left; /* Features list should stay left aligned */
+  text-align: left; 
 }
 
 .about-features-list li {
@@ -395,168 +431,27 @@ body {
   gap: 20px;
   flex-wrap: wrap;
 }
-.reading-sections {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-.reading-column {
-  flex: 1;
-  min-width: 320px;
-  max-width: 48%;
-}
-
-.plan-card {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
 
 .progress-bar-container {
-  width: 60%;
-  margin: 10px auto;
-  background-color: #eee;
-  border-radius: 10px;
-  overflow: hidden;
+  margin-top: 10px;
 }
 
 .progress-bar {
   height: 20px;
-  background-color: #ddd;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  color: white;
-  text-align: center;
-  line-height: 20px;
-}
-
-.progress-green {
-  background-color: #4caf50;
-}
-
-.button {
-  padding: 8px 16px;
-  background-color: #8bc34a;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  margin-top: 5px;
-}
-
-.button:hover {
-  background-color: #689f38;
-}
-
-.button-turquoise {
-  background-color: #4dd0e1;
-}
-
-.button-turquoise:hover {
-  background-color: #26c6da;
-}
-.create-goal-page {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 40px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-}
-.form-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
-
-.form-columns {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  text-align: left;
-
-}
-
-.column {
-  flex: 1;
-  flex: 1 1 45%;
-  min-width: 300px;
-}
-
-.form-container label {
-  font-weight: bold;
-  display: block;
-  margin-top: 15px;
-}
-
-.form-container input[type="text"],
-.form-container input[type="date"],
-.form-container input[type="number"],
-.form-container textarea,
-.form-container select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.star-rating {
-  font-size: 2em;
-  color: #ccc;
-  cursor: pointer;
-  user-select: none;
-}
-
-.star-rating .star.selected {
-  color: gold;
-}
-
-.form-container button {
-  margin-top: 30px;
-  padding: 10px 20px;
   background-color: #4CAF50;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
+  transition: width 0.4s ease-in-out;
 }
 
-.form-container button:hover {
-  background-color: #45a049;
-}
-
-.form-container .delete-btn {
-  background-color: #d9534f;
-}
-
-.form-container .delete-btn:hover {
-  background-color: #c9302c;
-}
-
-.form-container a {
-  display: inline-block;
-  margin-top: 20px;
-  color: #333;
-  text-decoration: none;
-}
-
-.form-container a:hover {
-  text-decoration: underline;
+.progress-label {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 4px;
 }
