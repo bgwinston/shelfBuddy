@@ -1,14 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import ReadingPlan, ReadingProgress, ReadingGoal, ReadingPlan
-from .forms import ReadingPlanForm, ReadingProgressForm
-from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
-from django.contrib.auth.decorators import login_required
-from .forms import ReadingGoalForm
 from math import ceil
-from datetime import date
-from django.shortcuts import get_object_or_404, redirect
-from .models import ReadingGoal
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import ReadingPlanForm, ReadingProgressForm, ReadingGoalForm
+from .models import ReadingPlan, ReadingProgress, ReadingGoal
+from shelfbuddy_backend.books.models import Book
 
 # View to create a new reading plan for the logged-in user
 @login_required
@@ -154,26 +150,36 @@ def check_falling_behind(request):
 # Main reading dashboard that shows active plans, goals, and behind alerts
 @login_required
 def reading_dashboard(request):
-    plans = ReadingPlan.objects.filter(user=request.user, is_active=True)
-    goals = ReadingGoal.objects.filter(user=request.user)
+    user = request.user
 
-    today = date.today()
+    # Get all active reading plans with progress
+    active_plans = ReadingPlan.objects.filter(user=user, is_active=True)
+    currently_reading = [
+        plan.book for plan in active_plans
+        if plan.readingprogress_set.exists()
+    ]
+
+    # other values...
+    recent_books = Book.objects.filter(user=user).order_by('-date_added')[:5]
+    wishlist_books = Book.objects.filter(user=user, is_wishlist=True)
+    overdue_books = Book.objects.filter(user=user, due_date__lt=date.today())
+
+    goals = ReadingGoal.objects.filter(user=user)
+
+    # optional behind alerts logic...
     behind_alerts = []
-
-    for plan in plans:
-        total_read = sum(p.pages_read for p in ReadingProgress.objects.filter(plan=plan))
-        total_days = (plan.target_end_date - plan.start_date).days + 1
-        total_goal_pages = plan.daily_target_pages * total_days
-
-        percent_complete = (total_read / total_goal_pages) * 100 if total_goal_pages > 0 else 0
-        plan.percent_complete = round(min(percent_complete, 100), 1)
-
-        expected_pages = plan.daily_target_pages * (today - plan.start_date).days + 1
+    today = date.today()
+    for plan in active_plans:
+        total_read = sum(p.pages_read for p in plan.readingprogress_set.all())
+        expected_pages = plan.daily_target_pages * (today - plan.start_date).days
         if total_read < expected_pages:
             behind_alerts.append(plan)
 
     return render(request, 'reading/reading_dashboard.html', {
-        'plans': plans,
+        'currently_reading': currently_reading,
+        'recent_books': recent_books,
+        'wishlist_books': wishlist_books,
+        'overdue_books': overdue_books,
         'goals': goals,
         'behind_alerts': behind_alerts,
     })
