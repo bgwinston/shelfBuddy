@@ -1,0 +1,23 @@
+{% extends 'reading/base.html' %}
+
+{% block content %}
+<div class="form-container">
+  <h2>📕 Loan Out: <em>{{ book.title }}</em></h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <label>Loaned To:</label>
+    <input type="text" name="loaned_to" required>
+
+    <label>Phone Number:</label>
+    <input type="text" name="loaned_to_phone" required>
+
+    <label>Due Date:</label>
+    <input type="date" name="due_date" required>
+
+    <button type="submit" class="button">📤 Confirm Loan</button>
+  </form>
+
+  <a href="{% url 'loaned_books' %}" class="back-link">← Back to Loan Tracker</a>
+</div>
+{% endblock %}

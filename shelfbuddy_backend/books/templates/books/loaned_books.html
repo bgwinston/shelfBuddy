@@ -6,6 +6,10 @@
 <div class="loaned-books-container">
   <h2>📕 Loaned Books Tracker</h2>
 
+  <div style="text-align: center; margin: 20px 0;">
+    <a href="{% url 'loan_instructions' %}" class="button" style="margin-left: 10px;">📋  Loan A Book Directions</a>
+  </div>
+
   {% if loaned_books %}
     <table class="loaned-books-table">
       <thead>

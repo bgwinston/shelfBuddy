@@ -29,6 +29,17 @@
               <a href="{% url 'bookview' book.google_book_id %}" class="view-details-link">
                   View Book Details
               </a>
+              <form method="post" action="{% url 'add_to_wishlist' %}">
+                {% csrf_token %}
+                <input type="hidden" name="title" value="{{ book.title }}">
+                <input type="hidden" name="authors" value="{{ book.authors }}">
+                <input type="hidden" name="genre" value="{{ book.genre }}">
+                <input type="hidden" name="description" value="{{ book.description }}">
+                <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
+                <input type="hidden" name="google_book_id" value="{{ book.google_book_id }}">
+                <input type="hidden" name="source" value="google">
+                <button type="submit">📚 Add to Wishlist</button>
+              </form>
           </div>
       {% endfor %}
   {% endif %}
@@ -52,5 +63,4 @@
       <button type="submit">Add Book</button>
   </form>
 
-</div> <!-- ⭐️ CLOSE THE WRAPPER -->
 {% endblock %}

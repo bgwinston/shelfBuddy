@@ -1,0 +1,31 @@
+{% extends 'reading/base.html' %}
+
+{% block title %}How to Loan a Book{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+  <h2 style="text-align: center; color: #2C2A41;">📚 How to Loan a Book</h2>
+
+  <div style="font-size: 18px; line-height: 1.8; color: #333;">
+    <p><strong><u>Go to Your Library</u></strong><br>
+    Click on <em>📘 Library</em> in the top navigation bar to view your personal collection.</p>
+
+    <p><strong><u>Choose a Book</u></strong><br>
+    Find the book you want to loan and click the <strong>Edit</strong> link beside it.</p>
+
+    <p><strong><u>Enter Loan Details</u></strong><br>
+    In the edit form, set <strong>Loaned</strong> to "Yes", fill in the <strong>Name</strong> and <strong>Phone Number</strong> of the borrower, and select the <strong>Due Date</strong>.</p>
+
+    <p><strong><u>Save the Form</u></strong><br>
+    Click the <strong>💾 Save Changes</strong> button at the bottom of the form.</p>
+
+    <p><strong><u>View Loaned Books</u></strong><br>
+    Go to <em>📕 Loans</em> in the navigation bar to view all your loaned books.</p>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="{% url 'mylibrary' %}" class="button">📘 Go to My Library</a>
+    <a href="{% url 'loaned_books' %}" class="button-turquoise" style="margin-left: 10px;">📕 View Loans</a>
+  </div>
+</div>
+{% endblock %}

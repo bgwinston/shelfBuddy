@@ -68,6 +68,7 @@ def login_view(request):
     return render(request, 'users/login.html')
 
 # Displays a personalized dashboard for the logged-in user with book and reading plan highlights
+
 @login_required
 def dashboard_view(request):
     currently_reading = Book.objects.filter(user=request.user, status='in_progress')[:3]
@@ -91,6 +92,7 @@ def dashboard_view(request):
         'overdue_books': overdue_books,
         'wishlist_books': wishlist_books,
         'behind_alerts': behind_alerts,
+        'plans': plans, 
     })
 
 # Loads the book search page where the user can add new books

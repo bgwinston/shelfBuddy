@@ -4,7 +4,7 @@
 {% if behind_alerts %}
   <div class="behind-alert-banner">
     🚨 You're falling behind on some reading plans! 
-    <a href="{% url 'check_falling_behind' %}">View Behind Alerts</a>
+    <a href="{% url 'check_falling_behind' %}">View Alerts</a>
   </div>
 {% endif %}
 
@@ -49,6 +49,9 @@
             <div style="margin-top: 10px;">
               <a href="{% url 'reading_plan_detail' plan.id %}" class="button">📖 View Details</a>
               <a href="{% url 'edit_reading_plan' plan.id %}" class="button button-turquoise" style="margin-left: 10px;">✏️ Edit Plan</a>
+              <a href="{% url 'delete_reading_plan' plan.id %}" style="font-size: 1em; padding: 8px 14px; background-color: #D32F2F; margin-left: 10px; border-radius: 6px; color: white;">
+                🗑️ Delete
+              </a>
             </div>
           </div>
         {% endfor %}

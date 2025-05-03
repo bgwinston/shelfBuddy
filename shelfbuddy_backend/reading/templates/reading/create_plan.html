@@ -4,18 +4,18 @@
 {% block body_class %}create-plan-page-background{% endblock %}
 
 {% block content %}
-<div class="create-plan-page">
+<div class="create-goal-page">
   <h2>🗓️ Create Reading Plan</h2>
 
   <form method="post" class="center-plan-form">
     {% csrf_token %}
     {{ form.as_p }}
-  
+
     <label style="display: block; margin-top: 15px;">
       <input type="checkbox" name="create_goal" />
       🎯 Also create a reading goal for this plan
     </label>
-  
+
     <button type="submit" class="button" style="margin-top: 15px;">➕ Create Plan</button>
   </form>
 

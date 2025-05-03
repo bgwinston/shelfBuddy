@@ -1,36 +1,37 @@
 {% extends 'reading/base.html' %}
 
 {% block content %}
-<div style="padding: 40px 60px;">
+<div class="container" style="max-width: 900px; margin: 50px auto; padding: 40px; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 
   <h2 style="text-align: center;">📝 My Wishlist</h2>
+
   {% if books %}
-    <table style="width: 100%; border-collapse: collapse;">
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
       <thead>
-        <tr>
-          <th>Cover</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Genre</th>
-          <th>Added</th>
-          <th>Action</th>
+        <tr style="background-color: #f5f5f5;">
+          <th style="padding: 10px;">Cover</th>
+          <th style="padding: 10px;">Title</th>
+          <th style="padding: 10px;">Author</th>
+          <th style="padding: 10px;">Genre</th>
+          <th style="padding: 10px;">Added</th>
+          <th style="padding: 10px;">Action</th>
         </tr>
       </thead>
       <tbody>
         {% for book in books %}
           <tr style="border-bottom: 1px solid #ddd;">
-            <td>
+            <td style="padding: 10px;">
               {% if book.cover_image %}
                 <img src="{{ book.cover_image }}" alt="Cover" height="75">
               {% else %}
                 <em>No cover</em>
               {% endif %}
             </td>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.genre|default:"N/A" }}</td>
-            <td>{{ book.date_added|date:"M d, Y" }}</td>
-            <td>
+            <td style="padding: 10px;">{{ book.title }}</td>
+            <td style="padding: 10px;">{{ book.author }}</td>
+            <td style="padding: 10px;">{{ book.genre|default:"N/A" }}</td>
+            <td style="padding: 10px;">{{ book.date_added|date:"M d, Y" }}</td>
+            <td style="padding: 10px;">
               <form method="post" action="{% url 'move_to_library' book.id %}">
                 {% csrf_token %}
                 <button type="submit">📚 Move to Library</button>
@@ -41,13 +42,11 @@
       </tbody>
     </table>
   {% else %}
-    <p>Your wishlist is currently empty.</p>
+    <p style="text-align: center; margin-top: 30px;">Your wishlist is currently empty.</p>
   {% endif %}
 
-  <div style="margin-top: 30px;">
-    <a href="{% url 'booksearch' %}" class="button">
-      ➕ Add Book to Wishlist
-    </a>
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="{% url 'booksearch' %}" class="button">➕ Add Book to Wishlist</a>
   </div>
 
 </div>

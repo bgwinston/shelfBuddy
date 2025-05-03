@@ -16,7 +16,6 @@ def create_reading_plan(request):
             plan.user = request.user
             plan.save()
 
-            # ✅ If "Also create a goal" checkbox is checked:
             if request.POST.get('create_goal'):
                 book = plan.book
                 total_pages = book.total_pages or 0
@@ -24,11 +23,11 @@ def create_reading_plan(request):
 
                 goal = ReadingGoal(
                     user=request.user,
-                    plan=plan,  # 🔗 link the goal to the plan
+                    plan=plan,  
                     name=f"Finish {book.title}",
                     goal_type='pages',
                     target_amount=total_pages,
-                    time_period='monthly',  # Optional: or derive based on total_days
+                    time_period='monthly',  
                     start_date=plan.start_date,
                     end_date=plan.target_end_date,
                 )
@@ -42,17 +41,11 @@ def create_reading_plan(request):
 
 # View to show details of a specific reading plan, including percent complete
 @login_required
+@login_required
 def reading_plan_detail(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
     progress = ReadingProgress.objects.filter(plan=plan).order_by('-date')
     total_read = sum(p.pages_read for p in progress)
-
-    total_days = (plan.target_end_date - plan.start_date).days + 1
-    total_goal_pages = plan.daily_target_pages * total_days
-
-    percent_complete = (total_read / total_goal_pages) * 100 if total_goal_pages > 0 else 0
-    percent_complete = min(percent_complete, 100)
-    plan.percent_complete = round(percent_complete, 1)
 
     return render(request, 'reading/plan_detail.html', {
         'plan': plan,
@@ -152,21 +145,17 @@ def check_falling_behind(request):
 def reading_dashboard(request):
     user = request.user
 
-    # Get all active reading plans with progress
     active_plans = ReadingPlan.objects.filter(user=user, is_active=True)
     currently_reading = [
         plan.book for plan in active_plans
         if plan.readingprogress_set.exists()
     ]
 
-    # other values...
     recent_books = Book.objects.filter(user=user).order_by('-date_added')[:5]
     wishlist_books = Book.objects.filter(user=user, is_wishlist=True)
     overdue_books = Book.objects.filter(user=user, due_date__lt=date.today())
-
     goals = ReadingGoal.objects.filter(user=user)
 
-    # optional behind alerts logic...
     behind_alerts = []
     today = date.today()
     for plan in active_plans:
@@ -176,6 +165,7 @@ def reading_dashboard(request):
             behind_alerts.append(plan)
 
     return render(request, 'reading/reading_dashboard.html', {
+        'plans': active_plans,  
         'currently_reading': currently_reading,
         'recent_books': recent_books,
         'wishlist_books': wishlist_books,
@@ -212,7 +202,7 @@ def about_shelfbuddy(request):
 @login_required
 def edit_reading_plan(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
-    goal = plan.goals.first()  # assuming only one goal per plan
+    goal = plan.goals.first()  
 
     if request.method == 'POST':
         plan_form = ReadingPlanForm(request.POST, instance=plan)
@@ -232,3 +222,9 @@ def edit_reading_plan(request, plan_id):
         'goal_form': goal_form,
         'goal': goal,
     })
+    
+@login_required
+def delete_reading_plan(request, plan_id):
+    plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    plan.delete()
+    return redirect('reading_dashboard')

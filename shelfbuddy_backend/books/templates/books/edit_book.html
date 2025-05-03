@@ -148,6 +148,9 @@
 
           <label>Phone Number:</label>
           <input type="text" name="loaned_to_phone" value="{{ book.loaned_to_phone|default:'' }}">
+
+          <label>Due Date:</label>
+          <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
         </div>
 
         <label for="rating">Rating:</label>

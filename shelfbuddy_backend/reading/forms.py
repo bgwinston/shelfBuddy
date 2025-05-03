@@ -10,6 +10,12 @@ class ReadingPlanForm(forms.ModelForm):
             'target_end_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['book'].queryset = user.book_set.all()
+
 class ReadingProgressForm(forms.ModelForm):
     class Meta:
         model = ReadingProgress

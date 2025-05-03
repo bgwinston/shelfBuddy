@@ -43,6 +43,14 @@ class ReadingPlan(models.Model):
     def total_pages_read(self):
         return sum(progress.pages_read for progress in self.readingprogress_set.all())
     
+    @property
+    def percent_complete(self):
+        total_read = sum(p.pages_read for p in self.readingprogress_set.all())
+        total_days = (self.target_end_date - self.start_date).days + 1
+        total_goal_pages = self.daily_target_pages * total_days
+        if total_goal_pages > 0:
+            return round(min((total_read / total_goal_pages) * 100, 100), 1)
+        return 0
 class ReadingProgress(models.Model):
     plan = models.ForeignKey(ReadingPlan, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)

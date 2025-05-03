@@ -4,7 +4,7 @@
 {% if behind_alerts %}
 <div class="behind-alert-banner">
   🚨 You're falling behind on some reading plans! 
-  <a href="{% url 'check_falling_behind' %}">View Behind Alerts</a>
+  <a href="{% url 'check_falling_behind' %}">View Alerts</a>
 </div>
 {% endif %}
 <h1 class="dashboard-heading">📚 Your Bookshelf Dashboard</h1>
@@ -14,10 +14,15 @@
   <div class="dashboard-section">
     <h2>📖 Currently Reading</h2>
     <ul>
-      {% for book in currently_reading %}
-        <li>{{ book.title }} by {{ book.author }}</li>
+      {% for plan in plans %}
+        <li>
+          <strong>{{ plan.book.title }}</strong><br>
+          Start: {{ plan.start_date }} |
+          Ends: {{ plan.target_end_date }} |
+          Daily Target: {{ plan.daily_target_pages }} pages/day
+        </li>
       {% empty %}
-        <li>No books in progress.</li>
+        <li>No active reading plans.</li>
       {% endfor %}
     </ul>
   </div>

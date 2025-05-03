@@ -139,12 +139,6 @@ def save_book_view(request):
     return redirect('mylibrary')
 
 @login_required
-def my_library_view(request):
-    user = request.user
-    books = Book.objects.filter(user=user, is_wishlist=False)  # Exclude wishlist books if needed
-    return render(request, 'books/mylibrary.html', {'books': books})
-
-@login_required
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id, user=request.user)
 
@@ -277,3 +271,7 @@ def my_library_view(request):
         books = Book.objects.filter(user=request.user)
     
     return render(request, 'books/mylibrary.html', {'books': books})
+
+@login_required
+def loan_instructions_view(request):
+    return render(request, 'books/loan_instructions.html')

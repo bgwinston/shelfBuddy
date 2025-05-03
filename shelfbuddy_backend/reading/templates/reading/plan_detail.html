@@ -13,13 +13,13 @@
     <p><strong>Total Pages Read:</strong> {{ plan.total_pages_read }}</p>
     </div>
 
-  <!-- Progress Bar -->
+
+<!-- Progress Bar -->
   <div class="progress-bar-container">
     <div class="progress-bar">
-      <div class="progress-fill" style="width: {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%;"></div>
-    </div>
-    <div class="progress-label">
-      {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete }}{% endif %}%
+      <div class="progress-fill progress-green" style="width: {% if plan.percent_complete > 100 %}100{% else %}{{ plan.percent_complete|floatformat:0 }}{% endif %}%;">
+        {{ plan.percent_complete|floatformat:0 }}%
+      </div>
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     <a href="{% url 'log_progress' plan.id %}" class="button">➕ Log Progress</a>
     <a href="{% url 'weekly_report' %}" class="button">📈 Weekly Report</a>
     <a href="{% url 'check_falling_behind' %}" class="button">⚠️ Behind Alerts</a>
-    <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+    <a href="{% url 'reading_dashboard' %}" class="button">← Back to Dashboard</a>
 
   </div>
 </div>
