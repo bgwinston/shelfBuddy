@@ -9,6 +9,13 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
+    {% if goal_form %}
+      <hr style="margin: 30px 0;">
+      <h3>🎯 Edit Connected Goal</h3>
+      {{ goal_form.as_p }}
+    {% endif %}
+
     <button type="submit" class="button button-turquoise">💾 Save Changes</button>
   </form>
 

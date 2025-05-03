@@ -8,22 +8,19 @@
   <label for="suggested-goals">Choose a Suggested Goal:</label>
   <select id="suggested-goals" onchange="autoFillGoalFields(this.value)">
     <option value="">-- Choose a Goal --</option>
-    <option value="books:5:monthly">📘 Read every day</option>
+    <option value="pages:10:daily">📘 Read every day</option>
     <option value="books:12:yearly">📗 Join and participate in a book club</option>
-    <option value="pages:100:weekly">📘 Finish 1 book per week</option>
-    <option value="pages:1000:monthly">📄 Social Media Book Review Video</option>
+    <option value="books:4:monthly">📘 Finish 1 book per week</option>
+    <option value="pages:500:monthly">📄 Social Media Book Review Video</option>
   </select>
-
   <p style="margin-top: 20px;"><strong>Or enter your own custom goal details below:</strong></p>
-
   <form method="post" class="center-goal-form">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="button button-red">🎯 Create Goal</button>
-  </form>
-
-  <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
-</div> <!-- ✅ Properly closes .create-goal-page -->
+  
+    <a href="{% url 'reading_dashboard' %}" class="back-to-dashboard">← Back to Dashboard</a>
+    </div>
 
 <script>
 function autoFillGoalFields(value) {

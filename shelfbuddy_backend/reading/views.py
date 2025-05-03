@@ -206,11 +206,23 @@ def about_shelfbuddy(request):
 @login_required
 def edit_reading_plan(request, plan_id):
     plan = get_object_or_404(ReadingPlan, id=plan_id, user=request.user)
+    goal = plan.goals.first()  # assuming only one goal per plan
+
     if request.method == 'POST':
-        form = ReadingPlanForm(request.POST, instance=plan)
-        if form.is_valid():
-            form.save()
+        plan_form = ReadingPlanForm(request.POST, instance=plan)
+        goal_form = ReadingGoalForm(request.POST, instance=goal) if goal else None
+
+        if plan_form.is_valid() and (goal_form is None or goal_form.is_valid()):
+            plan_form.save()
+            if goal_form:
+                goal_form.save()
             return redirect('reading_dashboard')
     else:
-        form = ReadingPlanForm(instance=plan)
-    return render(request, 'reading/edit_plan.html', {'form': form})
+        plan_form = ReadingPlanForm(instance=plan)
+        goal_form = ReadingGoalForm(instance=goal) if goal else None
+
+    return render(request, 'reading/edit_plan.html', {
+        'form': plan_form,
+        'goal_form': goal_form,
+        'goal': goal,
+    })
