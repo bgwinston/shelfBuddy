@@ -19,9 +19,29 @@ def create_reading_plan(request):
             plan = form.save(commit=False)
             plan.user = request.user
             plan.save()
+
+            # ✅ If "Also create a goal" checkbox is checked:
+            if request.POST.get('create_goal'):
+                book = plan.book
+                total_pages = book.total_pages or 0
+                total_days = (plan.target_end_date - plan.start_date).days + 1
+
+                goal = ReadingGoal(
+                    user=request.user,
+                    plan=plan,  # 🔗 link the goal to the plan
+                    name=f"Finish {book.title}",
+                    goal_type='pages',
+                    target_amount=total_pages,
+                    time_period='monthly',  # Optional: or derive based on total_days
+                    start_date=plan.start_date,
+                    end_date=plan.target_end_date,
+                )
+                goal.save()
+
             return redirect('reading_dashboard')
     else:
         form = ReadingPlanForm()
+
     return render(request, 'reading/create_plan.html', {'form': form})
 
 # View to show details of a specific reading plan, including percent complete

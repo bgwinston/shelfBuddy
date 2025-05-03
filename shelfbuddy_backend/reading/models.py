@@ -14,13 +14,14 @@ class ReadingGoal(models.Model):
     ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)  # Optional: keep if useful for naming goals
+    plan = models.ForeignKey('ReadingPlan', on_delete=models.CASCADE, null=True, blank=True, related_name='goals')  # 🔗 NEW FIELD
+    name = models.CharField(max_length=100)
     goal_type = models.CharField(max_length=20, choices=GOAL_TYPE_CHOICES)
     target_amount = models.PositiveIntegerField()
     time_period = models.CharField(max_length=20, choices=TIME_PERIOD_CHOICES)
     start_date = models.DateField()
     end_date = models.DateField()
-    completed_books = models.PositiveIntegerField(default=0)  # Optional if using `books` type
+    completed_books = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
 
