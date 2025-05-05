@@ -455,3 +455,49 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
+.edit-book-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.edit-book-grid label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  color: var(--color-text);
+}
+
+.edit-book-grid input,
+.edit-book-grid select,
+.edit-book-grid textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* space between buttons and link */
+  margin-top: 20px;
+}
+
+.back-link-wrapper {
+  margin-top: 10px;
+}
+
+.back-link {
+  color: var(--color-accent);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
