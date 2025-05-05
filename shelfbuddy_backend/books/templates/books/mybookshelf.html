@@ -13,7 +13,7 @@
 
   <div class="field-list">
     <p><strong>Author:</strong> {{ book.author }}</p>
-    <p><strong>Description:</strong> {{ book.description }}</p>
+    <p><strong>Description:</strong> {{ book.description|striptags }}</p>
     <p><strong>Genre:</strong> {{ book.genre|default:"N/A" }}</p>
     <p><strong>Library Type:</strong> 
       {% if book.is_public_library %}Public Library{% else %}My Library{% endif %}

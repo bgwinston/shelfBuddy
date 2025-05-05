@@ -10,7 +10,7 @@
     <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover" class="book-thumbnail">
   {% endif %}
 
-  <p class="book-description">{{ book.description }}</p>
+  <p class="book-description">{{ book.description|striptags }}</p>
 
   {% if book.rating %}
     <p><strong>Rating:</strong>
