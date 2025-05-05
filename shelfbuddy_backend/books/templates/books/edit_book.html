@@ -15,8 +15,7 @@
         <input type="text" name="author" value="{{ book.author }}" required>
 
         <label>Description:</label>
-        <textarea name="description" rows="5">{{ book.description }}</textarea>
-
+        <textarea name="description" rows="5">{{ book.description|striptags }}</textarea>
         <label>Total Pages:</label>
         <input type="number" name="total_pages" value="{{ book.total_pages|default:'' }}">
 
