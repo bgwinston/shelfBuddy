@@ -10,7 +10,7 @@
       <div class="form-column">
         <label>Title:</label>
         <input type="text" name="title" value="{{ book.title }}" required>
-
+ 
         <label>Author:</label>
         <input type="text" name="author" value="{{ book.author }}" required>
 
@@ -19,7 +19,7 @@
         <label>Total Pages:</label>
         <input type="number" name="total_pages" value="{{ book.total_pages|default:'' }}">
 
-        <label>Genre (choose one):</label>
+        <label>Genre (choose one):</label> 
         <select name="genre_existing">
           <option value="">-- Select a Genre --</option>
           {% for genre_option in genres %}

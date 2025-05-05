@@ -459,6 +459,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  align-items: start; 
 }
 
 .form-column label {
@@ -470,13 +471,22 @@ body {
 }
 
 .form-column input,
-.form-column textarea,
 .form-column select {
   width: 100%;
   padding: 10px;
   font-size: 14px;
   border-radius: 6px;
   border: 1px solid #ccc;
+}
+
+.form-column textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  min-height: 120px;
 }
 
 .button-group {
@@ -505,4 +515,6 @@ body {
   display: flex;
   flex-direction: column;
   text-align: left;
+  width: 100%;
+  max-width: 400px;
 }
