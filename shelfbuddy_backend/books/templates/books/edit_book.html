@@ -8,20 +8,19 @@
   <form method="post">
     {% csrf_token %}
     <div class="edit-book-grid">
-      <!-- Left Column -->
-      <div>
+      <div class="form-column">
         <label>Title:</label>
         <input type="text" name="title" value="{{ book.title }}" required>
-  
+    
         <label>Author:</label>
         <input type="text" name="author" value="{{ book.author }}" required>
-  
+    
         <label>Description:</label>
         <textarea name="description" rows="5">{{ book.description }}</textarea>
-        
+    
         <label>Total Pages:</label>
         <input type="number" name="total_pages" value="{{ book.total_pages|default:'' }}">
-  
+    
         <label>Genre (choose one):</label>
         <select name="genre_existing">
           <option value="">-- Select a Genre --</option>
@@ -29,45 +28,36 @@
             <option value="{{ genre_option }}" {% if genre_option == book.genre %}selected{% endif %}>{{ genre_option }}</option>
           {% endfor %}
         </select>
-  
+    
         <label>Or enter a new genre:</label>
         <input type="text" name="genre_new" placeholder="e.g. Sci-Fi">
       </div>
-  
-      <!-- Right Column -->
-      <div>
+    
+      <div class="form-column"> 
         <label>Library Type:</label>
         <select name="library_type" id="library-type">
           <option value="my" {% if not book.is_public_library %}selected{% endif %}>My Library</option>
           <option value="public" {% if book.is_public_library %}selected{% endif %}>Public Library</option>
         </select>
-  
-        <div id="public-library-details">
-          <label>Library Name:</label>
-          <input type="text" name="library_name" value="{{ book.library_name|default:'' }}">
-  
-          <label>Due Date:</label>
-          <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
-        </div>
-  
+    
         <label>Loaned:</label>
         <select name="is_loaned" id="is-loaned">
           <option value="no" {% if not book.is_loaned %}selected{% endif %}>No</option>
           <option value="yes" {% if book.is_loaned %}selected{% endif %}>Yes</option>
         </select>
-  
+    
         <div id="loan-details">
           <label>Loaned To:</label>
           <input type="text" name="loaned_to" value="{{ book.loaned_to|default:'' }}">
-  
+    
           <label>Phone Number:</label>
           <input type="text" name="loaned_to_phone" value="{{ book.loaned_to_phone|default:'' }}">
-  
+    
           <label>Due Date:</label>
           <input type="date" name="due_date" value="{{ book.due_date|date:'Y-m-d' }}">
         </div>
-  
-        <label for="rating">Rating:</label>
+    
+        <label>Rating:</label>
         <div class="star-rating">
           {% for i in "12345"|make_list %}
             <span class="star{% if book.rating and book.rating|add:'0' >= i %} selected{% endif %}" data-value="{{ i }}">&#9733;</span>

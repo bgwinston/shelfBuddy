@@ -459,24 +459,24 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
-  margin-bottom: 20px;
 }
 
-.edit-book-grid label {
-  font-weight: bold;
-  margin-top: 10px;
+.form-column label {
   display: block;
+  font-weight: bold;
   color: var(--color-text);
+  margin-top: 15px;
+  margin-bottom: 6px;
 }
 
-.edit-book-grid input,
-.edit-book-grid select,
-.edit-book-grid textarea {
+.form-column input,
+.form-column textarea,
+.form-column select {
   width: 100%;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  margin-bottom: 15px;
 }
 
 .button-group {
